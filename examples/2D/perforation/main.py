@@ -17,5 +17,5 @@ FSPC.setAlgo(FSPC.algorithm.ILS,25)
 
 # Start the FSPC simulation
 
-FSPC.general.simulate(0.3)
+FSPC.general.simulate(0.03)
 FSPC.general.printClock()

@@ -76,6 +76,14 @@ class Metafor(object):
 
     def applyLoading(self,load):
 
+        P = self.getPosition()
+        for i in range(len(load)): # TEST GAUSSIAN LOAD
+
+            x = P[i][0]
+            L = -1.2e7*np.exp(-np.power(x/0.5,2))
+            load[i] = [0,L,0]
+
+
         for interaction in self.interacM:
             for i,data in enumerate(load):
 
@@ -167,6 +175,7 @@ class Metafor(object):
     @tb.compute_time
     def update(self):
 
+        self.checkRupture()
         tb.Interp.sharePolytope()
         self.metaFac.save(self.mfac)
 
@@ -237,26 +246,11 @@ class Metafor(object):
     
     def checkRupture(self):
 
-        self.rupture.checkRuptureCriterion()
-        elementSet = self.interacM.getElementSet()
+        if tb.Step.time < 2.470e-02:
+            self.rupture.checkRuptureCriterion()
+        elementSet = self.interacM[0].getElementSet()
         self.polytope.activateBoundaryElements()
         elementSet.activateBoundaryElements()
-
-        # Disable or enable boundary elements (maybe useless)
-
-        for i in range(elementSet.size()):
-
-            disabled = True
-            element1D = elementSet.getElement(i)
-            curve = element1D.getMyMesh().getDownCurve(0)
-            
-            for j in range(curve.getNbOfUpSides()):
-
-                element2D = curve.getUpSide(j).getElement(0)
-                if element2D.getEnabled(): disabled = False
-
-            if disabled: element1D.setEnabled(False)
-            else: element1D.setEnabled(True)
 
         # Update the nodes in the FS interface (need FSInterface = InteracM)
 
@@ -274,3 +268,21 @@ class Metafor(object):
 
         for point in pointSet:
             self.FSI.addMeshPoint(point)
+
+
+
+
+
+
+        count = 0
+        for i in range(elementSet.size()):
+            count += 1
+
+        print('\n',count)
+
+        count = 0
+        for i in range(elementSet.size()):
+            element1D = elementSet.getElement(i)
+            if element1D.getEnabled(): count += 1
+
+        print(count,'\n')

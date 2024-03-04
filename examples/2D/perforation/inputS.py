@@ -120,14 +120,20 @@ def getMetafor(parm):
     tscm.setTimeStepDivisionFactor(2)
     # tscm.setNbOptiIte(25)
 
-    parm['rupture'] = rc
+    parm['rupture'] = app
     parm['FSInterface'] = groups['FSInterface']
     parm['exporter'] = gmsh.NodalGmshExport('metafor/output.msh',metafor)
 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_P)
+    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_EVMS)
     parm['exporter'].addExtractor(extr)
 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_EVMS)
+    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_EPL)
+    parm['exporter'].addExtractor(extr)
+
+    extr = w.DbNodalValueExtractor(groups['Solid'],w.Field1D(w.TX,w.GF1))
+    parm['exporter'].addExtractor(extr)
+
+    extr = w.DbNodalValueExtractor(groups['Solid'],w.Field1D(w.TY,w.GF1))
     parm['exporter'].addExtractor(extr)
 
     domain.build()
