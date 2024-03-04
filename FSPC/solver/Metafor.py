@@ -36,6 +36,7 @@ class Metafor(object):
         self.FSI = parm['FSInterface']
         self.exporter = parm['exporter']
         self.polytope = parm['polytope']
+        self.rupture = parm['rupture']
 
         # Mechanical and thermal interactions
 
@@ -229,3 +230,47 @@ class Metafor(object):
                 position[i,j] += node.getValue(w.Field1D(axe,w.RE))
 
         return position
+
+# |----------------------------------|
+# |   2D Rupture Interface Update    |
+# |----------------------------------|
+    
+    def checkRupture(self):
+
+        self.rupture.checkRuptureCriterion()
+        elementSet = self.interacM.getElementSet()
+        self.polytope.activateBoundaryElements()
+        elementSet.activateBoundaryElements()
+
+        # Disable or enable boundary elements (maybe useless)
+
+        for i in range(elementSet.size()):
+
+            disabled = True
+            element1D = elementSet.getElement(i)
+            curve = element1D.getMyMesh().getDownCurve(0)
+            
+            for j in range(curve.getNbOfUpSides()):
+
+                element2D = curve.getUpSide(j).getElement(0)
+                if element2D.getEnabled(): disabled = False
+
+            if disabled: element1D.setEnabled(False)
+            else: element1D.setEnabled(True)
+
+        # Update the nodes in the FS interface (need FSInterface = InteracM)
+
+        pointSet = set()
+        self.FSI.cleanMeshPoints(self.geometry.getMesh())
+
+        for i in range(elementSet.size()):
+
+            element1D = elementSet.getElement(i)
+            if not element1D.getEnabled(): continue
+            curve = element1D.getMyMesh()
+
+            for j in range(curve.getNbOfDownPoints()):
+                pointSet.add(curve.getDownPoint(j))
+
+        for point in pointSet:
+            self.FSI.addMeshPoint(point)
