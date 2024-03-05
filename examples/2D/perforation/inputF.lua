@@ -17,13 +17,13 @@ Problem.Mesh.exclusionZones = {}
 Problem.Mesh.alpha = 1.2
 Problem.Mesh.omega = 0.5
 Problem.Mesh.gamma = 0.5
-Problem.Mesh.hchar = 0.1
+Problem.Mesh.hchar = 0.01
 Problem.Mesh.gammaFS = 0.2
 Problem.Mesh.minHeightFactor = 1e-2
 
 Problem.Mesh.addOnFS = true
-Problem.Mesh.keepFluidElements = true
 Problem.Mesh.deleteFlyingNodes = true
+Problem.Mesh.keepFluidElements = false
 Problem.Mesh.deleteBoundElements = false
 
 -- Extractor Parameters

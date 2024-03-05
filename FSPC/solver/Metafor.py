@@ -76,14 +76,6 @@ class Metafor(object):
 
     def applyLoading(self,load):
 
-        P = self.getPosition()
-        for i in range(len(load)): # TEST GAUSSIAN LOAD
-
-            x = P[i][0]
-            L = -1.2e7*np.exp(-np.power(x/0.5,2))
-            load[i] = [0,L,0]
-
-
         for interaction in self.interacM:
             for i,data in enumerate(load):
 

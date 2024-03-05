@@ -8,12 +8,12 @@ gmsh.initialize()
 
 HS = 1
 LS = 2
-LF = 0.4
-HF = 1.5
+LF = 0.1
+HF = 1.2
 
-d = 0.1
-N = 11
-M = 21
+d = 0.01
+N = 101
+M = 201
 
 # |----------------------------------|
 # |   Points and Lines Definition    |
