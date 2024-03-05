@@ -38,7 +38,8 @@ class Algorithm(object):
             # Update the solvers for the next time step
 
             if verified:
-
+                
+                self.__checkRupture()
                 tb.Solver.update()
                 tb.Step.updateSave(tb.Solver)
                 self.hasRun = False
@@ -56,22 +57,22 @@ class Algorithm(object):
 
     def runFluid(self):
 
-        verified = None
         if CW.rank == 0:
             
             self.hasRun = True
             verified = tb.Solver.run()
 
+        else: verified = None
         return CW.bcast(verified,root=0)
     
     def runSolid(self):
 
-        verified = None
         if CW.rank == 1:
             
             self.hasRun = True
             verified = tb.Solver.run()
 
+        else: verified = None
         return CW.bcast(verified,root=1)
     
     # Reset the solvers to their last backup state
@@ -170,3 +171,19 @@ class Algorithm(object):
         timeStep = 'Time Step : {:.3e}'.format(tb.Step.dt)
         time = '\nTime : {:.3e}'.format(tb.Step.time).ljust(20)
         print(L,time,timeStep,L)
+
+# |----------------------------------|
+# |   2D Rupture Interface Update    |
+# |----------------------------------|
+
+    def __checkRupture(self):
+
+        if CW.rank == 0:
+
+            position = CW.recv(source=1,tag=7)
+            tb.Solver.checkRupture(position)
+
+        if CW.rank == 1:
+            
+            tb.Solver.checkRupture()
+            CW.send(tb.Solver.getPosition(),0,tag=7)

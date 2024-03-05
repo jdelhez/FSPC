@@ -171,37 +171,45 @@ class Pfem3D(object):
     def exit(self): self.problem.displayTimeStats()
     def getSize(self): return self.FSI.size()
 
-# |-----------------------------------|
-# |   2D Matching Interface Update    |
-# |-----------------------------------|
+# |----------------------------------|
+# |   2D Rupture Interface Update    |
+# |----------------------------------|
 
-    def projectInterface(self,recvPos):
+    def checkRupture(self,recvPos):
 
-        pExt = 1e5
         epsilon = 1e-6
         tagName = "FSInterface"
         position = self.getPosition()
+        pExt = self.solver.getPExt()
 
         # Remove broken nodes from the FS interface
 
         for i,pos in enumerate(position):
 
             dist = np.linalg.norm(pos-recvPos,axis=1)
-
+            node = self.mesh.getNode(self.FSI[i])
+            
             if(np.min(dist) > epsilon):
 
-                node = self.mesh.getNode(self.FSI[i])
-                node.m_isOnFreeSurface = True
-                node.m_isBound = False
-                node.m_tags.clear()
+                if(node.isFree()):
+                    self.mesh.removeNode(self.FSI[i])
+                
+                else:
+                    node.m_isOnFreeSurface = True
+                    node.m_isBound = False
+                    node.m_tags.clear()
 
         # Add new solid nodes on the FS interface
 
         for i,pos in enumerate(recvPos):
 
             dist = np.linalg.norm(pos-position,axis=1)
-            vectorPos = w.VectorDouble(pos)
-            states = w.VectorDoubles(3)
+            vectorPos = w.ArrayDouble3()
+            states = w.VectorDouble(3)
+
+            vectorPos[0] = pos[0]
+            vectorPos[1] = pos[1]
+            vectorPos[2] = 0
 
             states[0] = 0
             states[1] = 0

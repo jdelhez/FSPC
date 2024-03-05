@@ -175,7 +175,6 @@ class Metafor(object):
     @tb.compute_time
     def update(self):
 
-        self.checkRupture()
         tb.Interp.sharePolytope()
         self.metaFac.save(self.mfac)
 
@@ -246,7 +245,8 @@ class Metafor(object):
     
     def checkRupture(self):
 
-        if tb.Step.time < 2.470e-02:
+
+        if (self.getSize() == 60) and (tb.Step.time > 0.08):
             self.rupture.checkRuptureCriterion()
         elementSet = self.interacM[0].getElementSet()
         self.polytope.activateBoundaryElements()
@@ -268,21 +268,3 @@ class Metafor(object):
 
         for point in pointSet:
             self.FSI.addMeshPoint(point)
-
-
-
-
-
-
-        count = 0
-        for i in range(elementSet.size()):
-            count += 1
-
-        print('\n',count)
-
-        count = 0
-        for i in range(elementSet.size()):
-            element1D = elementSet.getElement(i)
-            if element1D.getEnabled(): count += 1
-
-        print(count,'\n')
