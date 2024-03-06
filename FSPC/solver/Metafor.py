@@ -237,9 +237,7 @@ class Metafor(object):
     
     def checkRupture(self):
 
-
-        if (self.getSize() == 60) and (tb.Step.time > 0.08):
-            self.rupture.checkRuptureCriterion()
+        self.rupture.checkRuptureCriterion()
         elementSet = self.interacM[0].getElementSet()
         self.polytope.activateBoundaryElements()
         elementSet.activateBoundaryElements()
