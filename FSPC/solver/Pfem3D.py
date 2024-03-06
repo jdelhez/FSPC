@@ -175,6 +175,7 @@ class Pfem3D(object):
 # |   2D Rupture Interface Update    |
 # |----------------------------------|
 
+    @tb.compute_time
     def checkRupture(self,recvPos):
 
         epsilon = 1e-6

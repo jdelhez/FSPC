@@ -235,6 +235,7 @@ class Metafor(object):
 # |   2D Rupture Interface Update    |
 # |----------------------------------|
     
+    @tb.compute_time
     def checkRupture(self):
 
         self.rupture.checkRuptureCriterion()
