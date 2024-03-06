@@ -23,7 +23,7 @@ Problem.Mesh.minHeightFactor = 1e-2
 
 Problem.Mesh.addOnFS = true
 Problem.Mesh.deleteFlyingNodes = true
-Problem.Mesh.keepFluidElements = false
+Problem.Mesh.keepFluidElements = true
 Problem.Mesh.deleteBoundElements = false
 
 -- Extractor Parameters
@@ -70,7 +70,7 @@ Problem.Solver.MomContEq.sparseSolverLib = 'MKL'
 Problem.Solver.MomContEq.pExt = 1e5
 Problem.Solver.MomContEq.maxIter = 25
 Problem.Solver.MomContEq.gammaFS = 0.5
-Problem.Solver.MomContEq.minRes = 1e-8
+Problem.Solver.MomContEq.minRes = 1e-6
 Problem.Solver.MomContEq.tolerance = 1e-16
 Problem.Solver.MomContEq.bodyForce = {0,-9.81}
 

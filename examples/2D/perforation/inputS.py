@@ -54,6 +54,8 @@ def getMetafor(parm):
     materset(1).put(w.MASS_DENSITY,2700)
     materset(1).put(w.POISSON_RATIO,0)
     materset(1).put(w.YIELD_NUM,1)
+
+    # Defines an isotropic hardening
     
     lawset.define(1,w.SwiftIsotropicHardening)
     lawset(1).put(w.IH_SIGEL,1e6)
@@ -110,7 +112,7 @@ def getMetafor(parm):
 
     # Mechanical iterations
 
-    # mim.setMaxNbOfIterations(25)
+    mim.setMaxNbOfIterations(25)
     mim.setResidualTolerance(1e-4)
 
     # Time step iterations
@@ -118,7 +120,7 @@ def getMetafor(parm):
     tscm = w.NbOfMechNRIterationsTimeStepComputationMethod(metafor)
     tsm.setTimeStepComputationMethod(tscm)
     tscm.setTimeStepDivisionFactor(2)
-    # tscm.setNbOptiIte(25)
+    tscm.setNbOptiIte(25)
 
     parm['rupture'] = app
     parm['FSInterface'] = groups['FSInterface']

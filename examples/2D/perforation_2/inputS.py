@@ -94,7 +94,7 @@ def getMetafor(parm):
     # Boundary conditions
 
     loadingset.define(groups['Side'],w.Field1D(w.TX,w.RE))
-    loadingset.define(groups['Bottom'],w.Field1D(w.TY,w.RE))
+    loadingset.define(groups['Side'],w.Field1D(w.TY,w.RE))
 
     # Mechanical time integration
 
@@ -104,7 +104,7 @@ def getMetafor(parm):
     # Mechanical iterations
 
     mim.setMaxNbOfIterations(25)
-    mim.setResidualTolerance(1e-4)
+    mim.setResidualTolerance(1e-3)
 
     # Time step iterations
     
