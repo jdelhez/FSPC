@@ -63,7 +63,7 @@ Problem.Solver.coeffDTincrease = 1
 -- Momentum Continuity Equation
 
 Problem.Solver.MomContEq = {}
-Problem.Solver.MomContEq.nlAlgo = 'NR'
+Problem.Solver.MomContEq.nlAlgo = 'Picard'
 Problem.Solver.MomContEq.residual = 'Ax_f'
 Problem.Solver.MomContEq.sparseSolverLib = 'MKL'
 
@@ -81,7 +81,7 @@ Problem.Solver.MomContEq.BC = {}
 Problem.Solver.MomContEq.BC['FSInterfaceVExt'] = true
 
 function Problem.IC.initStates(x,y,z)
-	return {0,-100,0}
+	return {0,-200,0}
 end
 
 function Problem.IC.initFSInterfaceStates(x,y,z)
@@ -90,15 +90,20 @@ end
 
 function Problem.Solver.MomContEq.BC.InletVEuler(x,y,z,t)
 
-	-- tmax = 1
-	-- vmax = -1000
+	tmin = 2e5
+	vmin = -200
 
-	-- if (t<tmax) then
-	-- 	local v = vmax*t/tmax
-	-- 	return 0,v
+	tmax = 1e-3
+	vmax = -1000
 
-	-- else
-	-- 	return 0,vmax
-	-- end
-	return 0,-100
+	if (t<tmin) then
+		return 0,vmin
+
+	elseif(t<tmax) then
+		local v = vmin+(vmax-vmin)*(t-tmin)/(tmax-tmin)
+		return 0,v
+
+	else
+		return 0,vmax
+	end
 end
