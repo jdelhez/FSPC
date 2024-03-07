@@ -7,4 +7,4 @@ cd build
 # Compile with CMake
 
 cmake -DCMAKE_BUILD_TYPE=Release ..
-make -j8
+cmake --build . --config Release -j 4
