@@ -12,7 +12,7 @@ Problem.Mesh = {}
 Problem.Mesh.remeshAlgo = 'GMSH'
 Problem.Mesh.mshFile = 'geometryF.msh'
 --Problem.Mesh.localHcharGroups = {'FSInterface','Reservoir','FreeSurface'} -- Mesh non-uniforme --> J'enleve? 
-Problem.Mesh.boundingBox = {-0.043, -0.0215 , 0.043, 0.0215},
+Problem.Mesh.boundingBox = {-0.043, -0.02155 , 0.043, 0.02155}
 Problem.Mesh.exclusionZones = {}
 
 
@@ -20,7 +20,7 @@ Problem.Mesh.exclusionZones = {}
 Problem.Mesh.alpha = 1
 Problem.Mesh.omega = 0.7
 Problem.Mesh.gamma = 0.9
-Problem.Mesh.hchar = 1e-3,
+Problem.Mesh.hchar = 1e-3
 Problem.Mesh.gammaFS = 0.5
 Problem.Mesh.minHeightFactor = 1e-3
 
@@ -52,7 +52,7 @@ Problem.Extractors[2] =  {}
 Problem.Extractors[2].kind = 'Point'
 Problem.Extractors[2].whatToWrite = 'p'
 Problem.Extractors[2].outputFile = 'pCenter.txt'
-Problem.Extractors[2].points = {0, 0}, -- je suppose on fait comme ça mais sans certitude? 
+Problem.Extractors[2].points = {{0, 0}} -- je suppose on fait comme ça mais sans certitude? 
 Problem.Extractors[2].timeBetweenWriting = math.huge
 
 -- Material Parameters
@@ -116,15 +116,24 @@ function Problem.Solver.MomContEq.BC.OutletP(x, y, z, t)
     return 0
 end
 
-function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
-   -- p = 10
-   if (t>0 and t<0.5) then
-    vx = 0.3*(1-math.cos(2*3.1415926*t/0.5))/2
-    else
-    vx = 0
-    end
-return vx, 0
+function Problem.Solver.MomContEq.BC.BoundaryV(x, y, z, t)
+    return 0, 0
 end
+
+function Problem.Solver.MomContEq.BC.InletP(x, y, z, t)
+    p = 10*math.min(1,t/0.3)
+    return p
+ end
+
+--function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
+-- p = 10
+--   if (t>0 and t<0.5) then
+--    vx = 0.3*(1-math.cos(2*3.1415926*t/0.5))/2
+--    else
+--    vx = 0
+--    end
+-- return vx, 0
+-- end
 
 
 

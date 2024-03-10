@@ -15,7 +15,7 @@ RBF = lambda r: np.square(r/R)*np.ma.log(r/R) # Une RBF qui fonctionne bien (**)
 pathF = path.dirname(__file__)+'/inputF.lua' # = Dossier_courrant/inputF.lua
 pathS = path.dirname(__file__)+'/inputS.py' # Chemin vers inputS.lua
 
-FSPC.setConvMech(1e-6) # Tolerance plus petite ou égale à minRes PFEM3D/Metafor
+FSPC.setResMech(1e-6) # Tolerance plus petite ou égale à minRes PFEM3D/Metafor
 FSPC.setStep(1e-2,25e-3) # Time step, time between writing
 FSPC.setSolver(pathF,pathS)
 

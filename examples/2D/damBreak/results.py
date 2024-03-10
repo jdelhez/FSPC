@@ -431,3 +431,7 @@ for file in directory:
     X.append(gmsh.model.mesh.getNode(tag)[0][0])
 
 tb.plotRef(time,X-X[0],data)
+
+import numpy as np
+np.savetxt("X.txt",X)
+np.savetxt("time.txt",time)

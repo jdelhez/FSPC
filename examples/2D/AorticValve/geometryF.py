@@ -130,13 +130,13 @@ sh.occ.synchronize()
 # Physical Boundary
 
 sh.addPhysicalGroup(2,[s],name='Fluid')
-sh.addPhysicalGroup(1,l[2:5]+l[10:13],name='FSInterface') # Mettre ca a la place de Boundary? Ou mettre les deux? COMMENT qu'on fait 
-sh.addPhysicalGroup(1,l[1:2]+l[5:7]+l[8:10]+l[13:14],name='Boundary')
-sh.addPhysicalGroup(1,l[14:15],name='Inlet')# forward
-sh.addPhysicalGroup(1,l[7:8],name='Outlet')#forward
+sh.addPhysicalGroup(1,l[1:4]+l[9:12],name='FSInterface') # Mettre ca a la place de Boundary? Ou mettre les deux? COMMENT qu'on fait 
+sh.addPhysicalGroup(1,l[0:1]+l[4:6]+l[7:9]+l[12:13],name='Boundary')
+sh.addPhysicalGroup(1,l[13:14],name='Inlet')# forward
+sh.addPhysicalGroup(1,l[6:7],name='Outlet')#forward
 # Pour un forward flow ; inverser si backward flow 
-sh.addPhysicalGroup(1,l[14:15],name='Outlet')# backward
-sh.addPhysicalGroup(1,l[7:8],name='Inlet')#backward
+#sh.addPhysicalGroup(1,l[14:15],name='Outlet')# backward
+#sh.addPhysicalGroup(1,l[7:8],name='Inlet')#backward
 
 # |----------------------------------------|
 # |   Mesh Characteristic Size Function    |

@@ -10,8 +10,7 @@ import math
 L = 0.016
 Z = 0.0125 
 R = 0.0215 
-f = R
-# f = 2*R
+f = 2*R
 t1 = 0.0010
 t2 = 0.0005
 
@@ -21,8 +20,8 @@ theta = L/rho
 
 # Characteristic size
 # to be adjusted 
-d = 0.00015
-d2= 0.0002
+d = 0.0002
+d2= 0.00025
 N = 11
 M = 41
 

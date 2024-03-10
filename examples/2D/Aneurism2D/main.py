@@ -16,15 +16,16 @@ pathF = path.dirname(__file__)+'/inputF.lua' # = Dossier_courrant/inputF.lua
 pathS = path.dirname(__file__)+'/inputS.py' # Chemin vers inputS.lua
 
 
-FSPC.setResMech(1e-6) # Tolerance plus petite ou égale à minRes PFEM3D/Metafor
+FSPC.setResMech(1e-5) # Tolerance plus petite ou égale à minRes PFEM3D/Metafor
 # FSPC.setStep(1e-2,25e-3) # Time step, time between writing
-FSPC.setStep(1e-4,12e-4) # Time step, time between writing
+FSPC.setStep(1e-2,1e-3) # Time step, time between writing
 FSPC.setSolver(pathF,pathS)
 
 # (FSPC.interpolator.KNN,1) Si même nombre de noeuds pour l'interface fluide et solide.
 # (FSPC.interpolator.KNN,2) Ok si les maillages son non conformes en 2D.
 # (FSPC.interpolator.RBF,RBF) OK (**) dans 99% des cas, plus long à calculer
 FSPC.setInterp(FSPC.interpolator.RBF,RBF) # Interpolation des données PFEM <=> Metafor
+# FSPC.setInterp(FSPC.interpolator.KNN,2)
 
 # Algo de prédiction FSI = g(û-u) dans les slides
 # BGS = Block gauss seidel le moins bon mais le plus simple
@@ -36,5 +37,5 @@ FSPC.setAlgo(FSPC.algorithm.MVJ,25) # algo (*), nombre max d'itérations
 # Start the FSPC simulation
 
 # FSPC.general.simulate(1.3) # Run 1.3 seconde
-FSPC.general.simulate(0.03) 
+FSPC.general.simulate(1.0) 
 FSPC.general.printClock() # Print time stats

@@ -5,7 +5,7 @@ Problem.axiSymmetric = true
 Problem.verboseOutput = true
 Problem.autoRemeshing = false -- Mettre en false si fluide-structure
 Problem.simulationTime = math.huge
-Problem.id = 'IncompNewtonNoT'
+Problem.id = "Casson"
 
 -- Mesh Parameters
 
@@ -16,7 +16,7 @@ Problem.Mesh.mshFile = 'geometryF.msh'
 Problem.Mesh.boundingBox = {-0.001, -0.001, 0.0055, 0.09} -- Maybe a changer; jsp trop ce que doit contenit la bounding bow en axisym 
 Problem.Mesh.exclusionZones = {}
 
-Problem.Mesh.alpha = 1
+Problem.Mesh.alpha = 1.2
 Problem.Mesh.omega = 0.7
 Problem.Mesh.gamma = 0.7
 Problem.Mesh.hchar = 0.0005
@@ -49,8 +49,7 @@ Problem.Extractors[1].timeBetweenWriting = math.huge
 Problem.Extractors[2] =  {}
 Problem.Extractors[2].kind = 'Point'
 Problem.Extractors[2].whatToWrite = 'p'
-Problem.Extractors[2].outputFile = 'pNewtonIncompAxiSym_y0015.txt'
--- Problem.Extractors[2].points = {{0, 0.015}, {0.0005, 0.015}, {0.001, 0.015}, {0.0015, 0.015}, {0.002, 0.015}, {0.0025, 0.015}, {0.003, 0.015}, {0.0035, 0.015}, {0.004, 0.015}, {0.0045, 0.015}, {0.005, 0.015}} 
+Problem.Extractors[2].outputFile = 'pCassonIncompAxiSym_y0015.txt'
 Problem.Extractors[2].points = {{0, 0.015}, {0.00025, 0.015}, {0.0005, 0.015}, {0.00075, 0.015}, {0.001, 0.015}, {0.00125, 0.015}, {0.0015, 0.015}, {0.00175, 0.015}, {0.002, 0.015}, {0.00225, 0.015},{0.0025, 0.015}, {0.00275, 0.015},{0.003, 0.015},{0.00325, 0.015}, {0.0035, 0.015}, {0.00375, 0.015}, {0.004, 0.015}, {0.00425, 0.015}, {0.0045, 0.015}, {0.00475, 0.015},{0.005, 0.015}} 
 Problem.Extractors[2].timeBetweenWriting =  math.huge
 
@@ -59,7 +58,7 @@ Problem.Extractors[2].timeBetweenWriting =  math.huge
 Problem.Extractors[3] =  {}
 Problem.Extractors[3].kind = 'Point'
 Problem.Extractors[3].whatToWrite = 'p'
-Problem.Extractors[3].outputFile = 'pNewtonAxiSym_y003.txt'
+Problem.Extractors[3].outputFile = 'pCassonAxiSym_y003.txt'
 Problem.Extractors[3].points = {{0, 0.03}, {0.00025, 0.03}, {0.0005, 0.03}, {0.00075, 0.03}, {0.001, 0.03}, {0.00125, 0.03}, {0.0015, 0.03}, {0.00175, 0.03}, {0.002, 0.03}, {0.00225, 0.03},{0.0025, 0.03}, {0.00275, 0.03},{0.003, 0.03},{0.00325, 0.03}, {0.0035, 0.03}, {0.00375, 0.03}, {0.004, 0.03}, {0.00425, 0.03}, {0.0045, 0.03}, {0.00475, 0.03},{0.005, 0.03}} 
 Problem.Extractors[3].timeBetweenWriting =  math.huge
 
@@ -69,7 +68,7 @@ Problem.Extractors[3].timeBetweenWriting =  math.huge
 Problem.Extractors[4] =  {}
 Problem.Extractors[4].kind = 'Point'
 Problem.Extractors[4].whatToWrite = 'p'
-Problem.Extractors[4].outputFile = 'pNewtonAxiSym_y0045.txt'
+Problem.Extractors[4].outputFile = 'pCassonAxiSym_y0045.txt'
 Problem.Extractors[4].points = {{0, 0.045}, {0.00025, 0.045}, {0.0005, 0.045}, {0.00075, 0.045}, {0.001, 0.045}, {0.00125, 0.045}, {0.0015, 0.045}, {0.00175, 0.045}, {0.002, 0.045}, {0.00225, 0.045},{0.0025, 0.045}, {0.00275, 0.045},{0.003, 0.045},{0.00325, 0.045}, {0.0035, 0.045}, {0.00375, 0.045}, {0.004, 0.045}, {0.00425, 0.045}, {0.0045, 0.045}, {0.00475, 0.045},{0.005, 0.045}} 
 Problem.Extractors[4].timeBetweenWriting =  math.huge
 
@@ -79,7 +78,7 @@ Problem.Extractors[4].timeBetweenWriting =  math.huge
 Problem.Extractors[5] =  {}
 Problem.Extractors[5].kind = 'Point'
 Problem.Extractors[5].whatToWrite = 'v'
-Problem.Extractors[5].outputFile = 'vNewtonAxiSym_y0015.txt'
+Problem.Extractors[5].outputFile = 'vCassonAxiSym_y0015.txt'
 Problem.Extractors[5].points = {{0, 0.015}, {0.00025, 0.015}, {0.0005, 0.015}, {0.00075, 0.015}, {0.001, 0.015}, {0.00125, 0.015}, {0.0015, 0.015}, {0.00175, 0.015}, {0.002, 0.015}, {0.00225, 0.015},{0.0025, 0.015}, {0.00275, 0.015},{0.003, 0.015},{0.00325, 0.015}, {0.0035, 0.015}, {0.00375, 0.015}, {0.004, 0.015}, {0.00425, 0.015}, {0.0045, 0.015}, {0.00475, 0.015},{0.005, 0.015}} 
 Problem.Extractors[5].timeBetweenWriting =  math.huge
 
@@ -88,7 +87,7 @@ Problem.Extractors[5].timeBetweenWriting =  math.huge
 Problem.Extractors[6] =  {}
 Problem.Extractors[6].kind = 'Point'
 Problem.Extractors[6].whatToWrite = 'v'
-Problem.Extractors[6].outputFile = 'vNewtonAxiSym_y003.txt'
+Problem.Extractors[6].outputFile = 'vCassonAxiSym_y003.txt'
 Problem.Extractors[6].points = {{0, 0.03}, {0.00025, 0.03}, {0.0005, 0.03}, {0.00075, 0.03}, {0.001, 0.03}, {0.00125, 0.03}, {0.0015, 0.03}, {0.00175, 0.03}, {0.002, 0.03}, {0.00225, 0.03},{0.0025, 0.03}, {0.00275, 0.03},{0.003, 0.03},{0.00325, 0.03}, {0.0035, 0.03}, {0.00375, 0.03}, {0.004, 0.03}, {0.00425, 0.03}, {0.0045, 0.03}, {0.00475, 0.03},{0.005, 0.03}} 
 Problem.Extractors[6].timeBetweenWriting =  math.huge
 
@@ -98,19 +97,23 @@ Problem.Extractors[6].timeBetweenWriting =  math.huge
 Problem.Extractors[7] =  {}
 Problem.Extractors[7].kind = 'Point'
 Problem.Extractors[7].whatToWrite = 'v'
-Problem.Extractors[7].outputFile = 'vNewtonAxiSym_y0045.txt'
+Problem.Extractors[7].outputFile = 'vCassonAxiSym_y0045.txt'
 Problem.Extractors[7].points = {{0, 0.045}, {0.00025, 0.045}, {0.0005, 0.045}, {0.00075, 0.045}, {0.001, 0.045}, {0.00125, 0.045}, {0.0015, 0.045}, {0.00175, 0.045}, {0.002, 0.045}, {0.00225, 0.045},{0.0025, 0.045}, {0.00275, 0.045},{0.003, 0.045},{0.00325, 0.045}, {0.0035, 0.045}, {0.00375, 0.045}, {0.004, 0.045}, {0.00425, 0.045}, {0.0045, 0.045}, {0.00475, 0.045},{0.005, 0.045}} 
 Problem.Extractors[7].timeBetweenWriting =  math.huge
+
 
 -- Material Parameters
 -- Laisser ca comme ca ? meme si ca ne permet pas de comparaison avec l'article 
 
 Problem.Material = {}
 --Problem.Material.mu = 0.003675
-Problem.Material.mu = 0.0035
+Problem.Material.mu = 0.0038
 Problem.Material.gamma = 0
 ---Problem.Material.rho = 1000
 Problem.Material.rho = 1050
+Problem.Material.mReg = 200
+Problem.Material.tau0 = 0.0035
+
 
 -- Solver Parameters
 
