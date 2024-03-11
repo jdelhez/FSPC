@@ -121,7 +121,8 @@ function Problem.Solver.MomContEq.BC.BoundaryV(x, y, z, t)
 end
 
 function Problem.Solver.MomContEq.BC.InletP(x, y, z, t)
-    p = 10*math.min(1,t/0.3)
+    -- p = 10*math.min(1,t/0.3)
+    p = 50*math.sin(2*3.14159*t)
     return p
  end
 
