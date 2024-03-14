@@ -22,7 +22,7 @@ def getMetafor(parm):
     domain = metafor.getDomain()
     domain.getGeometry().setDimPlaneStrain(1)
     metafor.getSolverManager().setSolver(w.DSSolver())
-    
+
     # Imports the mesh
 
     mshFile = os.path.join(os.path.dirname(__file__), 'geometry_S.msh')
@@ -43,24 +43,27 @@ def getMetafor(parm):
 
     materset = domain.getMaterialSet()
     materset.define(1, w.EvpIsoHHypoMaterial)
-    materset(1).put(w.ELASTIC_MODULUS, 70e9)
-    materset(1).put(w.MASS_DENSITY, 2700)
-    materset(1).put(w.POISSON_RATIO, 0)
+    materset(1).put(w.ELASTIC_MODULUS, 210e9)
+    materset(1).put(w.POISSON_RATIO, 0.284)
+    materset(1).put(w.MASS_DENSITY, 7860)
     materset(1).put(w.YIELD_NUM, 1)
 
-    # Defines an isotropic hardening
+    # Visco-plastic hardening of C1010 Steel
     
     lawset = domain.getMaterialLawSet()
-    lawset.define(1, w.SwiftIsotropicHardening)
-    lawset(1).put(w.IH_SIGEL, 1e6)
-    lawset(1).put(w.IH_B, 375)
-    lawset(1).put(w.IH_N, 0.2)
+    lawset.define(1, w.JohnsonCookMecYieldStress)
+    lawset(1).put(w.JC_A, 367e6)
+    lawset(1).put(w.JC_B, 275e6)
+    lawset(1).put(w.JC_C, 0.022)
+    lawset(1).put(w.JC_EPSP0, 1)
+    lawset(1).put(w.JC_N, 0.36)
+    lawset(1).put(w.JC_C2, 0)
 
     # Select a rupture criterion
 
     rc = w.IFRuptureCriterion()
     rc.setInternalField(w.IF_EPL)
-    rc.put(w.RUPT_CRIT_VALUE, 0.3)
+    rc.put(w.RUPT_CRIT_VALUE, 0.33)
     rc.put(w.RUPT_TYPE_CRIT, w.MEANBROKEN)
     app.addRuptureCriterion(rc)
     app.setAutoRupture(False)
@@ -90,20 +93,8 @@ def getMetafor(parm):
     # Boundary conditions
 
     loadingset = domain.getLoadingSet()
-    loadingset.define(groups['Bottom'], w.Field1D(w.TY, w.RE))
-    loadingset.define(groups['Bottom'], w.Field1D(w.TX, w.RE))
-
-    # position = list()
-    # for i in range(groups['Bottom'].getNumberOfMeshPoints()):
-
-    #     point = groups['Bottom'].getMeshPoint(i)
-    #     position.append(point.getPos0().get1())
-
-    # right = groups['Bottom'].getMeshPoint(int(np.argmax(position)))
-    # loadingset.define(right, w.Field1D(w.TX, w.RE))
-
-    # left = groups['Bottom'].getMeshPoint(int(np.argmin(position)))
-    # loadingset.define(left, w.Field1D(w.TX, w.RE))
+    loadingset.define(groups['Side'], w.Field1D(w.TX, w.RE))
+    loadingset.define(groups['Side'], w.Field1D(w.TY, w.RE))
 
     # Mechanical time integration
 
@@ -114,7 +105,7 @@ def getMetafor(parm):
 
     mim = metafor.getMechanicalIterationManager()
     mim.setMaxNbOfIterations(25)
-    mim.setResidualTolerance(1e-4)
+    mim.setResidualTolerance(1e-3)
 
     # Time step iterations
     
