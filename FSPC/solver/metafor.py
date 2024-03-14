@@ -251,7 +251,7 @@ class Metafor(object):
 
         self.rupture.checkRuptureCriterion()
         elementset = self.interaction_M[0].getElementSet()
-        self.polytope.activateBoundaryElements()
+        for poly in self.polytope: poly.activateBoundaryElements()
         elementset.activateBoundaryElements()
 
         # Update the nodes in the FS interface (need FSInterface = Interaction_M)

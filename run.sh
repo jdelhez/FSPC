@@ -19,7 +19,7 @@ export PYTHONPATH=${PWD}/../PFEM3D/build/bin:${PYTHONPATH}
 # export SCRIPT=${PWD}/examples/2D/thermoSquare/main.py
 # export SCRIPT=${PWD}/examples/2D/vonKarman/main.py
 export SCRIPT=${PWD}/examples/2D/perforation/main.py
-export SCRIPT=${PWD}/examples/2D/perforation_2/main.py
+# export SCRIPT=${PWD}/examples/2D/perforation_2/main.py
 
 # export SCRIPT=${PWD}/examples/3D/coolingDisk/main.py
 # export SCRIPT=${PWD}/examples/3D/crossFlow/main.py

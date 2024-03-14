@@ -186,7 +186,7 @@ class PFEM3D(object):
 
         epsilon = 1e-6
         tag_name = "FSInterface"
-        position = self.getPosition()
+        position = self.get_position()
         p_ext = self.solver.getPExt()
 
         # Remove broken nodes from the FS interface
