@@ -35,6 +35,7 @@ class Metafor(object):
 
         self.FSI = parm['FSInterface']
         self.extractor = parm['extractor']
+        self.rupture = parm['rupture']
 
         # Mechanical and thermal interactions
 
@@ -240,3 +241,32 @@ class Metafor(object):
                 position[i, j] += node.getValue(w.Field1D(axe, w.RE))
 
         return position
+    
+# |----------------------------------|
+# |   2D Rupture Interface Update    |
+# |----------------------------------|
+    
+    @tb.compute_time
+    def check_rupture(self):
+
+        self.rupture.checkRuptureCriterion()
+        elementset = self.interaction_M[0].getElementSet()
+        self.polytope.activateBoundaryElements()
+        elementset.activateBoundaryElements()
+
+        # Update the nodes in the FS interface (need FSInterface = Interaction_M)
+
+        pointset = set()
+        self.FSI.cleanMeshPoints(self.geometry.getMesh())
+
+        for i in range(elementset.size()):
+
+            element1D = elementset.getElement(i)
+            if not element1D.getEnabled(): continue
+            curve = element1D.getMyMesh()
+
+            for j in range(curve.getNbOfDownPoints()):
+                pointset.add(curve.getDownPoint(j))
+
+        for point in pointset:
+            self.FSI.addMeshPoint(point)
