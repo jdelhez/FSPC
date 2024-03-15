@@ -38,11 +38,11 @@ p.append(sh.occ.addPoint(CX, CY, 0, d))
 p.append(sh.occ.addPoint(CX-R, CY, 0, d))
 
 p.append(sh.occ.addPoint(BX, CY-BH, 0, d))
-p.append(sh.occ.addPoint(BX, CY + BH, 0, d))
-p.append(sh.occ.addPoint(CX + A, CY-BH, 0, d))
-p.append(sh.occ.addPoint(CX + A, CY + BH, 0, d))
+p.append(sh.occ.addPoint(BX, CY+BH, 0, d))
+p.append(sh.occ.addPoint(CX+A, CY-BH, 0, d))
+p.append(sh.occ.addPoint(CX+A, CY+BH, 0, d))
 
-# Lines List
+# Lines list
 
 l = list()
 h = list()
@@ -65,7 +65,7 @@ r.append(sh.occ.addLine(p[7], p[9]))
 # |------------------------------------|
 
 k = sh.occ.addCurveLoop(l)
-u = sh.occ.addCurveLoop(h + r)
+u = sh.occ.addCurveLoop(h+r)
 s = sh.occ.addPlaneSurface([k, -u])
 sh.occ.synchronize()
 
@@ -73,12 +73,12 @@ sh.mesh.setTransfiniteCurve(r[0], N)
 sh.mesh.setTransfiniteCurve(r[1], M)
 sh.mesh.setTransfiniteCurve(r[2], N)
 
-# Physical Boundary
+# Physical boundary
 
 sh.addPhysicalGroup(2, [s], name='Fluid')
 sh.addPhysicalGroup(1, r, name='FSInterface')
 sh.addPhysicalGroup(1, l[1:2], name='Outlet')
-sh.addPhysicalGroup(1, [l[0], l[2]] + h, name='Wall')
+sh.addPhysicalGroup(1, l[0:1]+l[2:3]+h, name='Wall')
 sh.addPhysicalGroup(1, l[3:4], name='Inlet')
 
 # |--------------------------|
@@ -87,6 +87,6 @@ sh.addPhysicalGroup(1, l[3:4], name='Inlet')
 
 sh.mesh.generate(2)
 gmsh.option.setNumber('Mesh.SaveParametric', 1)
-gmsh.write(os.path.dirname(__file__) + '/geometry_F.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_F.msh')
 gmsh.fltk.run()
 gmsh.finalize()

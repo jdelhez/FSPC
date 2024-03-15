@@ -30,7 +30,7 @@ p.append(sh.occ.addPoint(R, -R, 0, d))
 p.append(sh.occ.addPoint(R, R, 0, d))
 p.append(sh.occ.addPoint(-R, R, 0, d))
 
-# Lines List
+# Lines list
 
 l = list()
 h = list()
@@ -71,7 +71,7 @@ sh.addPhysicalGroup(1, l, name='Wall')
 # |   Mesh Characteristic Size Function    |
 # |----------------------------------------|
 
-fun = str(d) + ' + 0.1*F1'
+fun = str(d)+'+0.1*F1'
 sh.mesh.field.add('Distance', 1)
 sh.mesh.field.setNumber(1, 'Sampling', 1e4)
 sh.mesh.field.setNumbers(1, 'CurvesList', h)
@@ -83,9 +83,9 @@ sh.mesh.field.setAsBackgroundMesh(2)
 gmsh.option.setNumber('Mesh.MeshSizeFromPoints', 0)
 gmsh.option.setNumber('Mesh.MeshSizeExtendFromBoundary', 0)
 
-# Write the Mesh File
+# Write the mesh
 
 sh.mesh.generate(2)
-gmsh.write(os.path.dirname(__file__) + '/geometry_F.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_F.msh')
 gmsh.fltk.run()
 gmsh.finalize()

@@ -7,16 +7,16 @@ gmsh.initialize()
 # |---------------------------|
 
 R = 0.25
-L = 0.15 + R
+L = 0.15+R
 H = -0.125
 
-L1 = 0.25 + R
+L1 = 0.25+R
 L2 = 0.6-2*R
 
 D1 = 3.75-10*R
 D2 = 1.25
 
-HB = 0.75 + H + 5*R
+HB = 0.75+H+5*R
 RB = 0.375
 
 # Characteristic size
@@ -33,47 +33,47 @@ Q = 15
 
 p = list()
 
-p.append(sh.occ.addPoint(-(L + L1 + L2), H-5*R, 0, d))
-p.append(sh.occ.addPoint(-(L + L1 + L2), H + 5*R, 0, d))
+p.append(sh.occ.addPoint(-(L+L1+L2), H-5*R, 0, d))
+p.append(sh.occ.addPoint(-(L+L1+L2), H+5*R, 0, d))
 
-p.append(sh.occ.addPoint(-L, H + 5*R, 0, d))
-p.append(sh.occ.addPoint(-L, H + 4*R, 0, d))
-p.append(sh.occ.addPoint(-L, H + 3*R, 0, d))
+p.append(sh.occ.addPoint(-L, H+5*R, 0, d))
+p.append(sh.occ.addPoint(-L, H+4*R, 0, d))
+p.append(sh.occ.addPoint(-L, H+3*R, 0, d))
 
-p.append(sh.occ.addPoint(-(L + L2), H + 3*R, 0, d))
-p.append(sh.occ.addPoint(-(L + L2), H + 2*R, 0, d))
-p.append(sh.occ.addPoint(-(L + L2), H + R, 0, d))
+p.append(sh.occ.addPoint(-(L+L2), H+3*R, 0, d))
+p.append(sh.occ.addPoint(-(L+L2), H+2*R, 0, d))
+p.append(sh.occ.addPoint(-(L+L2), H+R, 0, d))
 
-p.append(sh.occ.addPoint(-L, H + R, 0, d))
+p.append(sh.occ.addPoint(-L, H+R, 0, d))
 p.append(sh.occ.addPoint(-L, H, 0, d))
 p.append(sh.occ.addPoint(-L, H-R, 0, d))
 
-p.append(sh.occ.addPoint(-(L + L2), H-R, 0, d))
-p.append(sh.occ.addPoint(-(L + L2), H-2*R, 0, d))
-p.append(sh.occ.addPoint(-(L + L2), H-3*R, 0, d))
+p.append(sh.occ.addPoint(-(L+L2), H-R, 0, d))
+p.append(sh.occ.addPoint(-(L+L2), H-2*R, 0, d))
+p.append(sh.occ.addPoint(-(L+L2), H-3*R, 0, d))
 
 p.append(sh.occ.addPoint(-L, H-3*R, 0, d))
 p.append(sh.occ.addPoint(-L, H-4*R, 0, d))
 p.append(sh.occ.addPoint(-L, H-5*R, 0, d))
 
-p.append(sh.occ.addPoint(L + L1 + L2, -H-5*R, 0, d))
-p.append(sh.occ.addPoint(L + L1 + L2, -H + 5*R, 0, d))
+p.append(sh.occ.addPoint(L+L1+L2, -H-5*R, 0, d))
+p.append(sh.occ.addPoint(L+L1+L2, -H+5*R, 0, d))
 
-p.append(sh.occ.addPoint(L, -H + 5*R, 0, d))
-p.append(sh.occ.addPoint(L, -H + 4*R, 0, d))
-p.append(sh.occ.addPoint(L, -H + 3*R, 0, d))
+p.append(sh.occ.addPoint(L, -H+5*R, 0, d))
+p.append(sh.occ.addPoint(L, -H+4*R, 0, d))
+p.append(sh.occ.addPoint(L, -H+3*R, 0, d))
 
-p.append(sh.occ.addPoint(L + L2, -H + 3*R, 0, d))
-p.append(sh.occ.addPoint(L + L2, -H + 2*R, 0, d))
-p.append(sh.occ.addPoint(L + L2, -H + R, 0, d))
+p.append(sh.occ.addPoint(L+L2, -H+3*R, 0, d))
+p.append(sh.occ.addPoint(L+L2, -H+2*R, 0, d))
+p.append(sh.occ.addPoint(L+L2, -H+R, 0, d))
 
-p.append(sh.occ.addPoint(L, -H + R, 0, d))
+p.append(sh.occ.addPoint(L, -H+R, 0, d))
 p.append(sh.occ.addPoint(L, -H, 0, d))
 p.append(sh.occ.addPoint(L, -H-R, 0, d))
 
-p.append(sh.occ.addPoint(L + L2, -H-R, 0, d))
-p.append(sh.occ.addPoint(L + L2, -H-2*R, 0, d))
-p.append(sh.occ.addPoint(L + L2, -H-3*R, 0, d))
+p.append(sh.occ.addPoint(L+L2, -H-R, 0, d))
+p.append(sh.occ.addPoint(L+L2, -H-2*R, 0, d))
+p.append(sh.occ.addPoint(L+L2, -H-3*R, 0, d))
 
 p.append(sh.occ.addPoint(L, -H-3*R, 0, d))
 p.append(sh.occ.addPoint(L, -H-4*R, 0, d))
@@ -83,12 +83,12 @@ p.append(sh.occ.addPoint(-RB, HB, 0, d))
 p.append(sh.occ.addPoint(0, HB, 0, d))
 p.append(sh.occ.addPoint(RB, HB, 0, d))
 
-p.append(sh.occ.addPoint(-(L + L1 + L2), H-(5*R + D1), 0, d))
-p.append(sh.occ.addPoint(-(L + L1 + L2), H + 5*R + D2, 0, d))
-p.append(sh.occ.addPoint(L + L1 + L2, H + 5*R + D2, 0, d))
-p.append(sh.occ.addPoint(L + L1 + L2, H-(5*R + D1), 0, d))
+p.append(sh.occ.addPoint(-(L+L1+L2), H-(5*R+D1), 0, d))
+p.append(sh.occ.addPoint(-(L+L1+L2), H+5*R+D2, 0, d))
+p.append(sh.occ.addPoint(L+L1+L2, H+5*R+D2, 0, d))
+p.append(sh.occ.addPoint(L+L1+L2, H-(5*R+D1), 0, d))
 
-# Lines List
+# Lines list
 
 l = list()
 r = list()
@@ -131,15 +131,6 @@ q.append(sh.occ.addLine(p[37], p[0]))
 c.append(sh.occ.addCircleArc(p[34], p[35], p[36]))
 c.append(sh.occ.addCircleArc(p[36], p[35], p[34]))
 
-# Closing polytope line
-
-L = sh.occ.addLine(p[0], p[1])
-R = sh.occ.addLine(p[17], p[18])
-
-sh.occ.synchronize()
-sh.mesh.setTransfiniteCurve(L, 1)
-sh.mesh.setTransfiniteCurve(R, 1)
-
 # |------------------------------------|
 # |   Physical Surface and Boundary    |
 # |------------------------------------|
@@ -147,49 +138,36 @@ sh.mesh.setTransfiniteCurve(R, 1)
 k = list()
 
 k.append(sh.occ.addCurveLoop(c))
-k.append(sh.occ.addCurveLoop(l + h + r + q))
+k.append(sh.occ.addCurveLoop(l+h+r+q))
 s = sh.occ.addPlaneSurface([k[1], -k[0]])
 sh.occ.synchronize()
 
-# Transfinite Mesh
+# Transfinite mesh
 
 sh.mesh.setTransfiniteCurve(c[0], N)
 sh.mesh.setTransfiniteCurve(c[1], N)
 
-sh.mesh.setTransfiniteCurve(l[1], M)
-sh.mesh.setTransfiniteCurve(l[3], M)
-sh.mesh.setTransfiniteCurve(l[5], M)
-sh.mesh.setTransfiniteCurve(l[7], M)
-sh.mesh.setTransfiniteCurve(l[9], M)
+for i in (1,3,5,7,9):
 
-sh.mesh.setTransfiniteCurve(r[1], M)
-sh.mesh.setTransfiniteCurve(r[3], M)
-sh.mesh.setTransfiniteCurve(r[5], M)
-sh.mesh.setTransfiniteCurve(r[7], M)
-sh.mesh.setTransfiniteCurve(r[9], M)
+    sh.mesh.setTransfiniteCurve(l[i], M)
+    sh.mesh.setTransfiniteCurve(r[i], M)
 
-sh.mesh.setTransfiniteCurve(l[2], P)
-sh.mesh.setTransfiniteCurve(l[4], P)
-sh.mesh.setTransfiniteCurve(l[6], P)
-sh.mesh.setTransfiniteCurve(l[8], P)
+for i in (2,4,6,8):
 
-sh.mesh.setTransfiniteCurve(r[2], P)
-sh.mesh.setTransfiniteCurve(r[4], P)
-sh.mesh.setTransfiniteCurve(r[6], P)
-sh.mesh.setTransfiniteCurve(r[8], P)
+    sh.mesh.setTransfiniteCurve(l[i], P)
+    sh.mesh.setTransfiniteCurve(r[i], P)
 
-sh.mesh.setTransfiniteCurve(l[0], Q)
-sh.mesh.setTransfiniteCurve(l[10], Q)
+for i in (0,10):
 
-sh.mesh.setTransfiniteCurve(r[0], Q)
-sh.mesh.setTransfiniteCurve(r[10], Q)
+    sh.mesh.setTransfiniteCurve(l[i], Q)
+    sh.mesh.setTransfiniteCurve(r[i], Q)
 
-# Physical Boundary
+# Physical boundary
 
 sh.addPhysicalGroup(2, [s], name='Fluid')
 sh.addPhysicalGroup(1, q[1:2], name='FreeSurface')
-sh.addPhysicalGroup(1, [h[0], h[2], q[0], q[2]], name='Wall')
-sh.addPhysicalGroup(1, l + r + c, name='FSInterface')
+sh.addPhysicalGroup(1, h[0:1]+h[2:3]+q[0:1]+q[2:3], name='Wall')
+sh.addPhysicalGroup(1, l+r+c, name='FSInterface')
 sh.addPhysicalGroup(1, h[1:2], name='Inlet')
 
 # |--------------------------|
@@ -198,6 +176,6 @@ sh.addPhysicalGroup(1, h[1:2], name='Inlet')
 
 sh.mesh.generate(2)
 gmsh.model.mesh.reverse()
-gmsh.write(os.path.dirname(__file__) + '/geometry_F.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_F.msh')
 gmsh.fltk.run()
 gmsh.finalize()

@@ -15,7 +15,7 @@ L2 = 0.1
 # Characteristic size
 
 d = 1e-3
-eps = 1e-5
+E = 1e-5
 N = 80
 
 # |----------------------------------|
@@ -26,13 +26,13 @@ p = list()
 
 p.append(sh.occ.addPoint(0, 0, 0, d))
 p.append(sh.occ.addPoint(L1, 0, 0, d))
-p.append(sh.occ.addPoint(L1 + S + L2, 0, 0, d))
+p.append(sh.occ.addPoint(L1+S+L2, 0, 0, d))
 p.append(sh.occ.addPoint(0, D, 0, d))
 p.append(sh.occ.addPoint(L1, D, 0, d))
 p.append(sh.occ.addPoint(L1, H, 0, d))
-p.append(sh.occ.addPoint(L1, eps, 0, d))
+p.append(sh.occ.addPoint(L1, E, 0, d))
 
-# Lines List
+# Lines list
 
 l = list()
 
@@ -54,18 +54,18 @@ s = sh.occ.addPlaneSurface([k])
 sh.occ.synchronize()
 sh.mesh.setTransfiniteCurve(l[2], N)
 
-# Boundary Domains
+# Physical boundary
 
 sh.addPhysicalGroup(2, [s], name='Fluid')
 sh.addPhysicalGroup(1, l[4:5], name='FreeSurface')
 sh.addPhysicalGroup(1, l[2:3], name='FSInterface')
-sh.addPhysicalGroup(1, [l[0], l[3]] + l[5:7], name='Reservoir')
+sh.addPhysicalGroup(1, l[0:1]+l[3:4]+l[5:7], name='Reservoir')
 
 # |----------------------------------------|
 # |   Mesh Characteristic Size Function    |
 # |----------------------------------------|
 
-fun = str(d) + ' + 0.2*F1'
+fun = str(d)+'+0.2*F1'
 sh.mesh.field.add('Distance', 1)
 sh.mesh.field.setNumber(1, 'Sampling', 1e4)
 sh.mesh.field.setNumbers(1, 'CurvesList', l)
@@ -77,9 +77,9 @@ sh.mesh.field.setAsBackgroundMesh(2)
 gmsh.option.setNumber('Mesh.MeshSizeFromPoints', 0)
 gmsh.option.setNumber('Mesh.MeshSizeExtendFromBoundary', 0)
 
-# Write the Mesh File
+# Write the mesh
 
 sh.mesh.generate(2)
-gmsh.write(os.path.dirname(__file__) + '/geometry_F.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_F.msh')
 gmsh.fltk.run()
 gmsh.finalize()

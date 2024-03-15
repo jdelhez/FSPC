@@ -22,7 +22,7 @@ p.append(sh.occ.addPoint(L, 0, 0))
 p.append(sh.occ.addPoint(L, HS, 0))
 p.append(sh.occ.addPoint(0, HS, 0))
 
-# Lines List
+# Lines list
 
 l = list()
 
@@ -47,11 +47,11 @@ sh.mesh.setTransfiniteCurve(l[3], N)
 sh.mesh.setTransfiniteSurface(s)
 sh.mesh.setRecombine(2, s)
 
-# Physical Boundary
+# Physical boundary
 
 sh.addPhysicalGroup(2, [s], name='Solid')
 sh.addPhysicalGroup(1, l[2:3], name='FSInterface')
-sh.addPhysicalGroup(1, [l[1], l[3]], name='Clamped')
+sh.addPhysicalGroup(1, l[1:2]+l[3:4], name='Clamped')
 sh.addPhysicalGroup(1, l[0:1], name='Bottom')
 
 # |--------------------------|
@@ -59,6 +59,6 @@ sh.addPhysicalGroup(1, l[0:1], name='Bottom')
 # |--------------------------|
 
 sh.mesh.generate(2)
-gmsh.write(os.path.dirname(__file__) + '/geometry_S.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_S.msh')
 gmsh.fltk.run()
 gmsh.finalize()

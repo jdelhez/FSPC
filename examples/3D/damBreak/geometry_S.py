@@ -29,7 +29,7 @@ p.append(sh.occ.addPoint(A, -R, S, d))
 p.append(sh.occ.addPoint(A, 0, S, d))
 p.append(sh.occ.addPoint(A, R, S, d))
 
-# Lines List
+# Lines list
 
 l = list()
 
@@ -51,7 +51,7 @@ s = list()
 g = list()
 
 k.append(sh.occ.addCurveLoop([l[2], l[3]]))
-k.append(sh.occ.addCurveLoop([ - l[4], -l[5]]))
+k.append(sh.occ.addCurveLoop([-l[4], -l[5]]))
 g.append(sh.occ.addCurveLoop([l[0], l[3], l[1], l[5]]))
 g.append(sh.occ.addCurveLoop([l[1], l[2], l[0], l[4]]))
 
@@ -59,13 +59,13 @@ for a in k: s.append(sh.occ.addPlaneSurface([a]))
 for a in g: s.append(sh.occ.addBSplineFilling(a))
 sh.occ.synchronize()
 
-# Volumes List
+# Volumes list
 
 h = sh.occ.addSurfaceLoop(s)
 v = sh.occ.addVolume([h])
 sh.occ.synchronize()
 
-# Physical Surface
+# Physical surface
 
 sh.addPhysicalGroup(3, [v], name='Solid')
 sh.addPhysicalGroup(2, s[1:], name='FSInterface')
@@ -76,6 +76,6 @@ sh.addPhysicalGroup(2, s[0:1], name='Clamped')
 # |--------------------------|
 
 sh.mesh.generate(3)
-gmsh.write(os.path.dirname(__file__) + '/geometry_S.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_S.msh')
 gmsh.fltk.run()
 gmsh.finalize()

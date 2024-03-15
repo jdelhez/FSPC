@@ -47,7 +47,7 @@ p.append(sh.occ.addPoint(A, -R, S, d))
 p.append(sh.occ.addPoint(A, 0, S, d))
 p.append(sh.occ.addPoint(A, R, S, d))
 
-# Lines List
+# Lines list
 
 l = list()
 
@@ -118,24 +118,24 @@ for a in k: s.append(sh.occ.addPlaneSurface([a]))
 for a in g: s.append(sh.occ.addBSplineFilling(a))
 sh.occ.synchronize()
 
-# Volumes List
+# Volumes list
 
 h = sh.occ.addSurfaceLoop(s[:6])
 v = sh.occ.addVolume([h])
 sh.occ.synchronize()
 
-# Physical Surface
+# Physical surface
 
 sh.addPhysicalGroup(3, [v], name='Fluid')
-sh.addPhysicalGroup(2, [s[1], s[4]], name='FreeSurface')
-sh.addPhysicalGroup(2, [s[6], s[12], s[13]], name='FSInterface')
-sh.addPhysicalGroup(2, [s[0], s[2], s[3], s[5]] + s[7:12], name='Reservoir')
+sh.addPhysicalGroup(2, s[1:2]+s[4:5], name='FreeSurface')
+sh.addPhysicalGroup(2, s[6:7]+s[12:13]+s[13:14], name='FSInterface')
+sh.addPhysicalGroup(2, s[0:1]+s[2:3]+s[3:4]+s[5:6]+s[7:12], name='Reservoir')
 
 # |----------------------------------------|
 # |   Mesh Characteristic Size Function    |
 # |----------------------------------------|
 
-fun = str(d) + ' + 0.4*F1'
+fun = str(d)+'+0.4*F1'
 sh.mesh.field.add('Distance', 1)
 sh.mesh.field.setNumber(1, 'Sampling', 1e3)
 sh.mesh.field.setNumbers(1, 'SurfacesList', s)
@@ -147,9 +147,9 @@ sh.mesh.field.setAsBackgroundMesh(2)
 gmsh.option.setNumber('Mesh.MeshSizeFromPoints', 0)
 gmsh.option.setNumber('Mesh.MeshSizeExtendFromBoundary', 0)
 
-# Write the Mesh File
+# Write the mesh
 
 sh.mesh.generate(3)
-gmsh.write(os.path.dirname(__file__) + '/geometry_F.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_F.msh')
 gmsh.fltk.run()
 gmsh.finalize()

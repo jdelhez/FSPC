@@ -26,15 +26,15 @@ P = 4
 p = list()
 
 p.append(sh.occ.addPoint(L1, (B-b)/2, 0))
-p.append(sh.occ.addPoint(L1 + w, (B-b)/2, 0))
-p.append(sh.occ.addPoint(L1 + w, (B + b)/2, 0))
-p.append(sh.occ.addPoint(L1, (B + b)/2, 0))
+p.append(sh.occ.addPoint(L1+w, (B-b)/2, 0))
+p.append(sh.occ.addPoint(L1+w, (B+b)/2, 0))
+p.append(sh.occ.addPoint(L1, (B+b)/2, 0))
 p.append(sh.occ.addPoint(L1, (B-b)/2, h))
-p.append(sh.occ.addPoint(L1 + w, (B-b)/2, h))
-p.append(sh.occ.addPoint(L1 + w, (B + b)/2, h))
-p.append(sh.occ.addPoint(L1, (B + b)/2, h))
+p.append(sh.occ.addPoint(L1+w, (B-b)/2, h))
+p.append(sh.occ.addPoint(L1+w, (B+b)/2, h))
+p.append(sh.occ.addPoint(L1, (B+b)/2, h))
 
-# Lines List
+# Lines list
 
 l = list()
 
@@ -86,7 +86,7 @@ sh.mesh.setTransfiniteCurve(l[6], P)
 for a in s: sh.mesh.setTransfiniteSurface(a)
 for a in s: sh.mesh.setRecombine(2, a)
 
-# Volumes List
+# Volumes list
 
 h = sh.occ.addSurfaceLoop(s)
 v = sh.occ.addVolume([h])
@@ -95,7 +95,7 @@ sh.occ.synchronize()
 sh.mesh.setTransfiniteVolume(v)
 sh.mesh.setRecombine(3, v)
 
-# Physical Surface
+# Physical surface
 
 sh.addPhysicalGroup(3, [v], name='Solid')
 sh.addPhysicalGroup(2, s[0:1], name='Clamped')
@@ -106,6 +106,6 @@ sh.addPhysicalGroup(2, s[1:], name='FSInterface')
 # |--------------------------|
 
 sh.mesh.generate(3)
-gmsh.write(os.path.dirname(__file__) + '/geometry_S.msh')
+gmsh.write(os.path.dirname(__file__)+'/geometry_S.msh')
 gmsh.fltk.run()
 gmsh.finalize()
