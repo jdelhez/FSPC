@@ -55,6 +55,14 @@ Problem.Extractors[2].outputFile = 'pCenter.txt'
 Problem.Extractors[2].points = {{0, 0}} -- je suppose on fait comme ça mais sans certitude? 
 Problem.Extractors[2].timeBetweenWriting = math.huge
 
+Problem.Extractors[3] =  {}
+Problem.Extractors[3].kind = 'Point'
+Problem.Extractors[3].whatToWrite = 'u'
+Problem.Extractors[3].outputFile = 'uOutlet.txt'
+Problem.Extractors[3].points = {{0.043, -0.0125}, {0.043, -0.01}, {0.043, -0.0075}, {0.043, -0.005}, {0.043, -0.0025}, {0.043, 0}, {0.043, 0.0025}, {0.043, 0.005},{0.043, 0.0075}, {0.043, 0.01}, {0.043, 0.0125} } -- je suppose on fait comme ça mais sans certitude? 
+Problem.Extractors[3].timeBetweenWriting = math.huge
+
+
 -- Material Parameters
 
 Problem.Material = {}

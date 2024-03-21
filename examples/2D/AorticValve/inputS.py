@@ -67,6 +67,9 @@ def getMetafor(parm):
     materset(2).put(w.MASS_DENSITY,1100)
     materset(2).put(w.POISSON_RATIO,0.45)
     
+
+
+
     # Proprietes d'un vaisseau sanguin a check ailleurs ! 
     
     # Pas de "contact parameter" (voir FlowContact !)
@@ -98,19 +101,33 @@ def getMetafor(parm):
     load1.addProperty(prp3)
     iset.add(load1)
     
-    #Maybe je dois separer en deux groupes? En haut et en bas? I don't knowww ; genre faire comme ça:  ??? 
+     # Contact parameters
 
-    #prp3 = w.ElementProperties(w.NodStress2DElement)
-    #load1 = w.NodInteraction(3)
-    #load1.push(groups['PeigneSide']) avec UpperSide 
-    #load1.addProperty(prp3)
-    #iset.add(load1)
+    penalty = 1e6
+    friction = 0.35
 
-    #prp4 = w.ElementProperties(w.NodStress2DElement)
-    #load2 = w.NodInteraction(4)
-    #load2.push(groups['DiskSide']) avec BottomSide 
-    #load2.addProperty(prp4)
-    #iset.add(load2)
+    materset.define(3,w.CoulombContactMaterial)
+    materset(3).put(w.PEN_TANGENT,friction*penalty)
+    materset(3).put(w.COEF_FROT_DYN,friction)
+    materset(3).put(w.COEF_FROT_STA,friction)
+    materset(3).put(w.PEN_NORMALE,penalty)
+    materset(3).put(w.PROF_CONT,0.0002)
+
+    #Maybe je dois separer en deux groupes? En haut et en bas? I don't know ??  
+
+    prp4 = w.ElementProperties(w.Contact2DElement)
+    prp4.put(w.AREAINCONTACT,w.AIC_ONCE)
+    prp4.put(w.MATERIAL,3)
+
+    # Defines the contact entities
+
+    ci = w.DdContactInteraction(4)
+    ci.setTool(groups['LeafletUp'])
+    ci.setSmoothNormals(False)
+    ci.push(groups['LeafletBottom'])
+    ci.setSinglePass()
+    ci.addProperty(prp4)
+    iset.add(ci)
 
     # Boundary conditions 
     # On bloque la base du solide --> Je dois bloquer quoi moi du coup? Les côtés "side" non? 

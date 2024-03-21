@@ -7,13 +7,13 @@ gmsh.initialize()
 # |---------------------------|
 
 cm =1e-2
-L  = 6.0*cm
-L2 = 3.0*cm
+L  = 3.0*cm
+L2 = 0.25*cm
 w = 0.5*cm
 
 # Characteristic size
 
-d = 0.05*cm
+d = 0.04*cm
 
 # |----------------------------------|
 # |   Points and Lines Definition    |
@@ -64,6 +64,7 @@ sh.addPhysicalGroup(2,[s],name='Fluid')
 sh.addPhysicalGroup(1,l[1:2],name='FSInterface')  
 sh.addPhysicalGroup(1,l[0:1],name='Inlet')
 sh.addPhysicalGroup(1,l[2:3],name='Outlet')
+#sh.addPhysicalGroup(1,l[2:3],name='FreeSurface')
 
 
 

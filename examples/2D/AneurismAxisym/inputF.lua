@@ -16,12 +16,12 @@ Problem.Mesh.mshFile = 'geometryF.msh'
 Problem.Mesh.boundingBox = {-0.001, -0.0905, 0.031, 0.0905} -- Maybe a changer; jsp trop ce que doit contenit la bounding bow en axisym 
 Problem.Mesh.exclusionZones = {}
 
-Problem.Mesh.alpha = 1.0 -- 1.0
-Problem.Mesh.omega = 0.7
-Problem.Mesh.gamma = 0.7
+Problem.Mesh.alpha = 1.3 -- 1.0
+Problem.Mesh.omega = 0.85
+Problem.Mesh.gamma = 0.5
 Problem.Mesh.hchar = 0.001 -- 0.0005
-Problem.Mesh.gammaFS = 0.5
-Problem.Mesh.minHeightFactor = 1e-4
+Problem.Mesh.gammaFS = 0.2
+Problem.Mesh.minHeightFactor = 1e-3
 
 Problem.Mesh.addOnFS = false
 Problem.Mesh.keepFluidElements = true
@@ -149,6 +149,9 @@ Problem.Solver.MomContEq.bodyForce = {0,0}
 Problem.IC = {}
 Problem.Solver.MomContEq.BC = {}
 Problem.Solver.MomContEq.BC['FSInterfaceVExt'] = true -- FSInterface + VExt Pour FSPC
+Problem.Solver.MomContEq.BC['AxisFreeSlipEuler'] = true
+Problem.Solver.MomContEq.BC['one_epsFreeSlip'] = 1e4
+
 
 -- Boundary Condition Functions
 
@@ -179,13 +182,26 @@ end
 
 
 function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
-    if (x<0.0095) then
-        v = 0.1
-    else
-        v = 0.
-    end
-    return 0, v
+
+	local vmax = 0.1
+	local tmax = 0.01
+
+	if (t<tmax) then
+		local v = (t/tmax)*vmax
+		return 0,v
+	else
+		return 0,vmax
+	end
  end
+
+--function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
+  --  if (x<0.0095) then
+      --  v = 0.1
+  --  else
+    --  v = 0.
+   -- end
+   -- return 0, v
+ --end
 
 
 

@@ -181,6 +181,9 @@ sh.addPhysicalGroup(2,[s[1]],name='SolidUp')
 
 sh.addPhysicalGroup(1,l2[0:3] + h2[0:3],name='FSInterface')
 
+sh.addPhysicalGroup(1,l2[1:3],name='LeafletBottom')
+sh.addPhysicalGroup(1,h2[0:2],name='LeafletUp')
+
 
 sh.addPhysicalGroup(1,l2[3:4] + h2[3:4],name='Sides')
 

@@ -10,20 +10,20 @@ Problem.id = 'IncompNewtonNoT'
 -- Mesh Parameters
 
 Problem.Mesh = {}
-Problem.Mesh.remeshAlgo = 'GMSH'
+Problem.Mesh.remeshAlgo = 'CGAL'
 Problem.Mesh.mshFile = 'geometryF.msh'
 --Problem.Mesh.localHcharGroups = {'FSInterface','Reservoir','FreeSurface'} -- Mesh non-uniforme --> J'enleve? 
-Problem.Mesh.boundingBox = {-0.001, -0.001, 0.0055, 0.09} -- Maybe a changer; jsp trop ce que doit contenit la bounding bow en axisym 
+Problem.Mesh.boundingBox = {0, 0, 0.005, 0.0325} -- Maybe a changer; jsp trop ce que doit contenit la bounding bow en axisym 
 Problem.Mesh.exclusionZones = {}
 
 Problem.Mesh.alpha = 1.3 -- 1.0
-Problem.Mesh.omega = 0.7 -- 0.7
-Problem.Mesh.gamma = 0.9 -- 0.7
+Problem.Mesh.omega = 0.85 -- 0.7
+Problem.Mesh.gamma = 0.5 -- 0.7
 Problem.Mesh.hchar = 0.0005
-Problem.Mesh.gammaFS = 0.5
-Problem.Mesh.minHeightFactor = 1e-4
+Problem.Mesh.gammaFS = 0.2
+Problem.Mesh.minHeightFactor = 1e-3
 
-Problem.Mesh.addOnFS = false
+Problem.Mesh.addOnFS = true
 Problem.Mesh.keepFluidElements = true
 Problem.Mesh.deleteFlyingNodes = false
 Problem.Mesh.deleteBoundElements = false
@@ -135,7 +135,7 @@ Problem.Solver.MomContEq.residual = 'Ax_f'
 -- Problem.Solver.MomContEq.sparseSolverLib = 'MKL'
 
 --
-Problem.Solver.MomContEq.tolerance = 1e-7 
+Problem.Solver.MomContEq.tolerance = 1e-6 
 Problem.Solver.MomContEq.gammaFS = 0.5 
 --
 
@@ -144,37 +144,21 @@ Problem.Solver.MomContEq.maxIter = 25
 Problem.Solver.MomContEq.minRes = 1e-8
 Problem.Solver.MomContEq.bodyForce = {0,0}
 
+
+
 -- Fluid Structure Interface
 
 Problem.IC = {}
 Problem.Solver.MomContEq.BC = {}
 Problem.Solver.MomContEq.BC['FSInterfaceVExt'] = true -- FSInterface + VExt Pour FSPC
 
+Problem.Solver.MomContEq.BC['AxisFreeSlipEuler'] = true
+Problem.Solver.MomContEq.BC['one_epsFreeSlip'] = 1e4
+
 -- Boundary Condition Functions
 
 function Problem.IC.initStates(x,y,z)
-    td = 0 + 0.21
-    p0= 0
-    --p0 = 6471.68782493127*math.cos(0*td + 0) + 
-    --4546.40390397331*math.cos(5.80640640376384*td + 2.88303288234243) + 
-    --2912.28391822816*math.cos(11.6128128075277*td + 0.437321132460916) + 
-    --1999.49340669353*math.cos(17.4192192112915*td -1.80886753960572) + 
-    --1365.06363497520*math.cos(23.2256256150554*td + 2.00090876389695) + 
-    --674.792594796269*math.cos(29.0320320188192*td -0.524481534622267) + 
-    --144.936378283116*math.cos(34.8384384225831*td -2.31301923374297) + 
-    --320.573352689215*math.cos(40.6448448263469*td + 2.87413985644085) + 
-    --380.090549614032*math.cos(46.4512512301107*td + 0.221634032043418) + 
-    --286.600758107930*math.cos(52.2576576338746*td -2.47517628449584) 
-    v0 = 0.0685123642679439*math.cos(0*td + 0) + 
-    0.126514121510227*math.cos(5.74759839519073*td -2.17096143198117) + 
-    0.125541265762513*math.cos(11.4951967903815*td + 1.45334193151593) + 
-    0.0453077057278536*math.cos(17.2427951855722*td -0.806586010701596) + 
-    0.0494034611660211*math.cos(22.9903935807629*td -2.69330226694046) + 
-    0.0224653857684426*math.cos(28.7379919759537*td + 1.07426355614492) + 
-    0.0134055314219953*math.cos(34.4855903711444*td - 0.567424391681387) + 
-    0.00593831629572069*math.cos(40.2331887663351*td + 2.75397232683334)  
-
-    return {0, v0, p0}
+    return {0, 0, 0}
 end
 
 -- Du coup je ne dois pas avoir de BC sur les FSIinterface? Ou quand même si? Car si je mets que vy = 0, comment ça pourrait se déformer?? 
@@ -185,7 +169,8 @@ end
 
 function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
     if (x<0.0045) then
-        td = t + 0.21 
+        dt = 0.000
+        td = t  - dt  
         v = 0.0685123642679439*math.cos(0*td + 0) + 
         0.126514121510227*math.cos(5.74759839519073*td -2.17096143198117) + 
         0.125541265762513*math.cos(11.4951967903815*td + 1.45334193151593) + 
@@ -197,8 +182,9 @@ function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
     else
         v=0
     end
+    v = v * math.min(1,t/0.05)
     return 0, v
- end
+end
 
 
 
@@ -207,7 +193,8 @@ function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
 --end
 
 function Problem.Solver.MomContEq.BC.OutletP(x, y, z, t)
-    td = t + 0.21
+    dt = 0.000
+    td = t  - dt
     p = 6471.68782493127*math.cos(0*td + 0) + 
         4546.40390397331*math.cos(5.80640640376384*td + 2.88303288234243) + 
         2912.28391822816*math.cos(11.6128128075277*td + 0.437321132460916) + 
@@ -218,9 +205,26 @@ function Problem.Solver.MomContEq.BC.OutletP(x, y, z, t)
         320.573352689215*math.cos(40.6448448263469*td + 2.87413985644085) + 
         380.090549614032*math.cos(46.4512512301107*td + 0.221634032043418) + 
         286.600758107930*math.cos(52.2576576338746*td -2.47517628449584) 
-    p = p*0.7
+    p = p * math.min(1,t/0.05)
+    
     return p
 end
+
+-- function Problem.Solver.MomContEq.BC.InletP(x, y, z, t)
+--     td = t 
+--     p = 6471.68782493127*math.cos(0*td + 0) + 
+--         4546.40390397331*math.cos(5.80640640376384*td + 2.88303288234243) + 
+--         2912.28391822816*math.cos(11.6128128075277*td + 0.437321132460916) + 
+--         1999.49340669353*math.cos(17.4192192112915*td -1.80886753960572) + 
+--         1365.06363497520*math.cos(23.2256256150554*td + 2.00090876389695) + 
+--         674.792594796269*math.cos(29.0320320188192*td -0.524481534622267) + 
+--         144.936378283116*math.cos(34.8384384225831*td -2.31301923374297) + 
+--         320.573352689215*math.cos(40.6448448263469*td + 2.87413985644085) + 
+--         380.090549614032*math.cos(46.4512512301107*td + 0.221634032043418) + 
+--         286.600758107930*math.cos(52.2576576338746*td -2.47517628449584) 
+--     p = p * math.min(1,t/0.1)
+--     return p
+-- end
 
 --function Problem.Mesh.computeHcharFromDistance(x,y,z,t,dist) -- Mesh non-uniforme
 --	return Problem.Mesh.hchar+dist*0.1

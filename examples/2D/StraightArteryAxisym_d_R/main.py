@@ -18,7 +18,7 @@ pathS = path.dirname(__file__)+'/inputS.py' # Chemin vers inputS.lua
 
 FSPC.setResMech(1e-8) # Tolerance plus petite ou égale à minRes PFEM3D/Metafor
 # FSPC.setStep(1e-2,25e-3) # Time step, time between writing
-FSPC.setStep(5e-3,1e-3) # Time step, time between writing
+FSPC.setStep(5e-4,5e-2) # Time step, time between writing
 FSPC.setSolver(pathF,pathS)
 
 # (FSPC.interpolator.KNN,1) Si même nombre de noeuds pour l'interface fluide et solide.
@@ -36,5 +36,5 @@ FSPC.setAlgo(FSPC.algorithm.MVJ,25) # algo (*), nombre max d'itérations
 # Start the FSPC simulation
 
 # FSPC.general.simulate(1.3) # Run 1.3 seconde
-FSPC.general.simulate(1.1) 
+FSPC.general.simulate(3) 
 FSPC.general.printClock() # Print time stats
