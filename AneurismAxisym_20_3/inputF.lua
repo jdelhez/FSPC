@@ -123,8 +123,8 @@ Problem.Solver.id = 'PSPG'
 Problem.Solver.adaptDT = true
 Problem.Solver.maxDT = math.huge
 Problem.Solver.initialDT = math.huge
-Problem.Solver.coeffDTDecrease = math.huge
-Problem.Solver.coeffDTincrease = math.huge
+Problem.Solver.coeffDTDecrease = 2
+Problem.Solver.coeffDTincrease = 1
 
 -- Momentum Continuity Equation
 
@@ -149,7 +149,7 @@ Problem.Solver.MomContEq.bodyForce = {0,0}
 Problem.IC = {}
 Problem.Solver.MomContEq.BC = {}
 Problem.Solver.MomContEq.BC['FSInterfaceVExt'] = true -- FSInterface + VExt Pour FSPC
-Problem.Solver.MomContEq.BC['AxisFreeSlipEuler'] = true
+-- Problem.Solver.MomContEq.BC['AxisFreeSlipEuler'] = true
 Problem.Solver.MomContEq.BC['one_epsFreeSlip'] = 1e4
 
 -- Boundary Condition Functions

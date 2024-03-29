@@ -86,7 +86,7 @@ sh.addPhysicalGroup(1,l[0:1],name='Inlet')
 sh.addPhysicalGroup(1,l[4:5],name='Outlet')
 #sh.addPhysicalGroup(1,l[4:5],name='FreeSurface')
 sh.addPhysicalGroup(1,l[1:2]+l[3:4],name='Fixed')
-sh.addPhysicalGroup(1,[l[5]],name='Axis')
+#sh.addPhysicalGroup(1,[l[5]],name='FreeSurface')
 
 
 

@@ -6,7 +6,7 @@ import FSPC
 
 path_F = path.dirname(__file__)+'/input_F.lua'
 path_S = path.dirname(__file__)+'/input_S.py'
-FSPC.init_solver(path_F, path_S)
+solver = FSPC.init_solver(path_F, path_S)
 
 # Set the coupling algorithm
 
@@ -21,7 +21,7 @@ FSPC.set_interpolator(interpolator)
 
 # Set the time step manager
 
-step = FSPC.general.TimeStep(1e-3, 1e-2)
+step = FSPC.general.TimeStep(5e-4, 1e-2)
 FSPC.set_time_step(step)
 
 # Set the convergence manager

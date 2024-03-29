@@ -2,41 +2,38 @@ import os.path as path
 import numpy as np
 import FSPC
 
-# FSPC en 5 étapes
-# [1] On prédit un déplacemeent solide
-# [2] On lance PFEM3D sous cette condition, on obtient une contrainte de surface
-# [3] On lance Metafor sous cette condition, on obtient un déplacement
-# [4] On compare le déplacement prédit en [1] et celui obtenu en [4] => résidu
-# [5] Si résidu > tolerance, on update le déplacement prédit avec un algo au choix (*), on
-# revient en arrière et on recommmence. Si résidu < tolerance, on passe au pas de temps suivant
+# Path to the solver input files
 
-# R = 0.005 # Rayon pour la RBF, entre 1 et 20x la taille carac du mesh solide ou fluide
-R = 0.005 # Rayon pour la RBF, entre 1 et 20x la taille carac du mesh solide ou fluide
-RBF = lambda r: np.square(r/R)*np.ma.log(r/R) # Une RBF qui fonctionne bien (**)
-pathF = path.dirname(__file__)+'/inputF.lua' # = Dossier_courrant/inputF.lua
-pathS = path.dirname(__file__)+'/inputS.py' # Chemin vers inputS.lua
+path_F = path.dirname(__file__)+'/inputF.lua'
+path_S = path.dirname(__file__)+'/inputS.py'
+FSPC.init_solver(path_F, path_S)
 
+# Pour limiter le nombre de pas de temps PFEM3D entre 2 appels de FSPC
+# from mpi4py.MPI import COMM_WORLD as CW
+# if CW.rank == 0: solver.max_division = 1
 
-FSPC.setResMech(1e-6) # Tolerance plus petite ou égale à minRes PFEM3D/Metafor
-# FSPC.setStep(1e-2,25e-3) # Time step, time between writing
-FSPC.setStep(5e-4,5e-3) # Time step, time between writing
-FSPC.setSolver(pathF,pathS)
+# Set the coupling algorithm
 
-# (FSPC.interpolator.KNN,1) Si même nombre de noeuds pour l'interface fluide et solide.
-# (FSPC.interpolator.KNN,2) Ok si les maillages son non conformes en 2D.
-# (FSPC.interpolator.RBF,RBF) OK (**) dans 99% des cas, plus long à calculer
-FSPC.setInterp(FSPC.interpolator.RBF,RBF) # Interpolation des données PFEM <=> Metafor
-# FSPC.setInterp(FSPC.interpolator.KNN,2)
+algorithm = FSPC.algorithm.MVJ(25)
+FSPC.set_algorithm(algorithm)
 
-# Algo de prédiction FSI = g(û-u) dans les slides
-# BGS = Block gauss seidel le moins bon mais le plus simple
-# ILS = Interface quasi newton with inverse least square
-# MVJ = le ILS mais avec mémoire du pas de temps prévcédent, utile si le pas de temps ne change pas trop.
-FSPC.setAlgo(FSPC.algorithm.MVJ,25) # algo (*), nombre max d'itérations
+# Set the interface interpolator
 
+RBF = lambda r: np.square(r/0.005)*np.ma.log(r/0.005)
+interpolator = FSPC.interpolator.RBF(RBF)
+FSPC.set_interpolator(interpolator)
 
-# Start the FSPC simulation
+# Set the time step manager
 
-# FSPC.general.simulate(1.3) # Run 1.3 seconde
-FSPC.general.simulate(2.0) 
-FSPC.general.printClock() # Print time stats
+step = FSPC.general.TimeStep(5e-4, 5e-3)
+FSPC.set_time_step(step)
+
+# Set the convergence manager
+
+residual = FSPC.general.Residual(1e-6)
+FSPC.set_mechanical_res(residual)
+
+# Start the FSI simulation
+
+algorithm.simulate(2)
+FSPC.general.print_clock()

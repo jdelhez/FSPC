@@ -139,51 +139,32 @@ def getMetafor(parm):
 
     parm['interacM'] = load
     parm['FSInterface'] = groups['FSInterface']
-    parm['exporter'] = gmsh.NodalGmshExport('metafor/output.msh',metafor)
+    parm['extractor'] = gmsh.GmshNodalExtractor(metafor,'metafor/output.msh',)
     
-    parm['polytope'] = None
     #parm['polytope'] = load.getElementSet() ?? 
 
     #  Contrainte de Von Mises (0) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_EVMS)
-    parm['exporter'].addExtractor(extr)
+    parm['extractor'].add(extr)
 
     #  Contrainte SigmaYY (1) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_YY)
-    parm['exporter'].addExtractor(extr)
+    parm['extractor'].add(extr)
 
     #  Contrainte SigmaZZ (2) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_ZZ)
-    parm['exporter'].addExtractor(extr)
+    parm['extractor'].add(extr)
 
     #  Contrainte SigmaXY (3) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XY)
-    parm['exporter'].addExtractor(extr)
+    parm['extractor'].add(extr)
 
     #  Contrainte SigmaXX (4) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XX)
-    parm['exporter'].addExtractor(extr)
-
-
-
-
-    #parm['exporter'] = gmsh.NodalGmshExport('metafor/output.msh',metafor)
-    
-    # parm['exporter'] = gmsh.GmshExport('metafor/output.msh',metafor)
-    # parm['exporter'].addInternalField([w.IF_EVMS,w.IF_P,w.IF_SIG_XX])
-
-    
-    #extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_EVMS)
-    #parm['exporter'].addExtractor(extr)
-
-    #extr = w.DbNodalValueExtractor(groups['Solid'],w.Field1D(w.TX,w.GF1))
-    #parm['exporter'].addExtractor(extr)
-
-    #extr = w.DbNodalValueExtractor(groups['Solid'],w.Field1D(w.TY,w.GF1))
-    #parm['exporter'].addExtractor(extr)
+    parm['extractor'].add(extr)
     
     domain.build()
-
+    os.makedirs('metafor')
     return metafor
 
 
