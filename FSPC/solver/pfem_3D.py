@@ -196,7 +196,7 @@ class PFEM3D(object):
 
         for i, pos in enumerate(position):
 
-            dist = np.linalg.norm(pos - recv_pos, axis=1)
+            dist = np.linalg.norm(pos-recv_pos, axis=1)
             node = self.mesh.getNode(self.FSI[i])
 
             if(np.min(dist) > epsilon):
@@ -213,7 +213,7 @@ class PFEM3D(object):
 
         for i, pos in enumerate(recv_pos):
 
-            dist = np.linalg.norm(pos - position,axis=1)
+            dist = np.linalg.norm(pos-position, axis=1)
             vector_pos = w.ArrayDouble3()
             states = w.VectorDouble(3)
 

@@ -14,12 +14,12 @@ FSPC.set_algorithm(algorithm)
 
 # Set the interface interpolator
 
-interpolator = FSPC.interpolator.KNN(1)
+interpolator = FSPC.interpolator.LEP()
 FSPC.set_interpolator(interpolator)
 
 # Set the time step manager
 
-step = FSPC.general.TimeStep(1e-6, 1e-9)
+step = FSPC.general.TimeStep(1e-7, 1e-9)
 FSPC.set_time_step(step)
 
 # Set the convergence manager

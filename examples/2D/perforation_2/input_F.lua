@@ -16,7 +16,7 @@ Problem.Mesh.exclusionZones = {}
 
 Problem.Mesh.alpha = 1.2
 Problem.Mesh.omega = 0.5
-Problem.Mesh.gamma = 0.5
+Problem.Mesh.gamma = 0.3
 Problem.Mesh.hchar = 5e-5
 Problem.Mesh.gammaFS = 0.2
 Problem.Mesh.minHeightFactor = 1e-2
@@ -90,10 +90,10 @@ end
 
 function Problem.Solver.MomContEq.BC.InletVEuler(x, y, z, t)
 
-	tmin = 2e5
+	tmin = 1e-5
 	vmin = -200
 
-	tmax = 1e-3
+	tmax = 1e-4
 	vmax = -1000
 
 	if (t<tmin) then
