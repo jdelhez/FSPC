@@ -1,7 +1,12 @@
-from .k_neighbour import KNN
+from .interpolator import Interpolator
+del interpolator
+
+# Mesh interpolation K-nearest neighbours
+
+from .linear_projection import LEP
+del linear_projection
+
+# Mesh interpolation radial basis functions
+
 from .basis_function import RBF
-
-# Remove the base modules
-
-del k_neighbour
 del basis_function

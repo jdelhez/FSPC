@@ -2,9 +2,9 @@ from ..general import toolbox as tb
 import pfem3Dw as w
 import numpy as np
 
-# |-----------------------------------|
-# |   Initializes the Fluid Wraper    |
-# |-----------------------------------|
+# |--------------------------------------|
+# |   Fluid Solver Wrapper for PFEM3D    |
+# |--------------------------------------|
 
 class PFEM3D(object):
     def __init__(self, path: str):
@@ -16,7 +16,7 @@ class PFEM3D(object):
         if 'WC' in self.problem.getID():
 
             self.WC = True
-            self.max_division = 200
+            self.max_division = 1000
 
         else:
 
@@ -56,9 +56,9 @@ class PFEM3D(object):
         else: self.solver.setTimeStep(tb.Step.dt)
         return self.problem.simulate()
 
-# |------------------------------------|
-# |   Dirichlet Boundary Conditions    |
-# |------------------------------------|
+# |----------------------------------------|
+# |   Get Dirichlet Boundary Conditions    |
+# |----------------------------------------|
 
     def apply_displacement(self, disp: np.ndarray):
 
@@ -75,9 +75,9 @@ class PFEM3D(object):
         for i, vector in enumerate(self.BC):
             vector[self.dim] = temp[i][0]
 
-# |----------------------------------|
-# |   Neumann Boundary Conditions    |
-# |----------------------------------|
+# |--------------------------------------|
+# |   Get Neumann Boundary Conditions    |
+# |--------------------------------------|
 
     def get_loading(self):
 
@@ -138,7 +138,7 @@ class PFEM3D(object):
 
     # Create or update the exclusion boundary
 
-    def update_polytope(self, polytope:list):
+    def update_polytope(self, polytope: list):
 
         for i, face_list in enumerate(polytope):
 
@@ -146,12 +146,12 @@ class PFEM3D(object):
             try: self.mesh.updatePoly(self.poly[i], vec)
             except: self.poly.append(self.mesh.addPolytope(vec))
 
-# |------------------------------------------|
-# |   Update the Solver After Convergence    |
-# |------------------------------------------|
+# |------------------------------------|
+# |   Other Miscellaneous Functions    |
+# |------------------------------------|
 
     @tb.compute_time
-    def update(self, polytope: object):
+    def update(self, polytope: list):
 
         self.update_polytope(polytope)
         self.mesh.remesh(verboseOutput = False)
@@ -162,10 +162,9 @@ class PFEM3D(object):
         if not self.WC: self.solver.precomputeMatrix()
         self.problem.copySolution(self.prev_solution)
 
-# |------------------------------|
-# |   Other Wrapper Functions    |
-# |------------------------------|
+    # Bring back the solver to its previous state
 
+    @tb.compute_time
     def way_back(self):
         self.problem.loadSolution(self.prev_solution)
 
@@ -173,9 +172,13 @@ class PFEM3D(object):
     @tb.compute_time
     def save(self): self.problem.dump()
 
-    @tb.write_logs
-    def exit(self): self.problem.displayTimeStats()
+    # Return the number of nodes at the interface
+
     def get_size(self): return self.FSI.size()
+
+    # Print the time stats at destruction
+
+    def __del__(self): self.problem.displayTimeStats()
 
 # |----------------------------------|
 # |   2D Rupture Interface Update    |

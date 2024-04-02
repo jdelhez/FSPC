@@ -7,34 +7,29 @@ import numpy as np
 # |------------------------------------|
 
 class Interpolator(object):
-    def __init__(self):
 
-        self.initialize_variable()
+    def initialize(self):
 
-        # Share the position vectors between solvers
+        position = tb.Solver.get_position()
+
+        # Share the position vector between solvers
 
         if CW.rank == 0:
 
             self.recv_pos = CW.recv(source=1, tag=1)
-            CW.send(tb.Solver.get_position(), 1, tag=2)
+            CW.send(position, 1, tag=2)
 
         elif CW.rank == 1:
 
-            CW.send(tb.Solver.get_position(), 0, tag=1)
+            self.disp = np.copy(position)
+            if tb.has_therm: self.temp = tb.Solver.get_temperature()
+
+            CW.send(position, 0, tag=1)
             self.recv_pos = CW.recv(source=0, tag=2)
 
-# |----------------------------------------|
-# |   Initialize the Interpolation Data    |
-# |----------------------------------------|
+        # Compute the FS mesh interpolation matrix
 
-    @tb.only_solid
-    def initialize_variable(self):
-
-        if tb.ResMech:
-            self.disp = tb.Solver.get_position()
-
-        if tb.ResTher:
-            self.temp = tb.Solver.get_temperature()
+        if hasattr(self, 'mapping'): self.mapping(position)
 
 # |------------------------------------------|
 # |   Communicate the Boundary Conditions    |
@@ -93,7 +88,7 @@ class Interpolator(object):
     @tb.only_mechanical
     def predict_displacement(self, verified: bool):
 
-        if verified:
+        if not hasattr(self, 'prev_disp') or verified:
 
             self.prev_disp = np.copy(self.disp)
             self.velocity_disp = tb.Solver.get_velocity()
@@ -107,9 +102,9 @@ class Interpolator(object):
     # Predictor for the temparature coupling
 
     @tb.only_thermal
-    def predict_temperature(self, verified):
+    def predict_temperature(self, verified: bool):
 
-        if verified:
+        if not hasattr(self, 'prev_temp') or verified:
 
             self.prev_temp = np.copy(self.temp)
             self.velocity_temp = tb.Solver.get_tempgrad()
