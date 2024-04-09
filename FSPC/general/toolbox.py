@@ -11,7 +11,8 @@ import time
 has_mecha = False
 has_therm = False
 
-# Store the computation times of functions
+def is_fluid(): return CW.rank == 0
+def is_solid(): return CW.rank == 1
 
 import collections
 clock = collections.defaultdict(float)
@@ -48,7 +49,7 @@ def compute_time(function: Callable):
 def only_solid(function: Callable):
     def wrapper(*args):
 
-        if CW.rank == 1: return function(*args)
+        if is_solid(): return function(*args)
 
     return wrapper
 
@@ -69,6 +70,36 @@ def only_thermal(function: Callable):
         if has_therm: return function(*args)
 
     return wrapper
+
+# |------------------------------------|
+# |   Run the Fluid or Solid Solver    |
+# |------------------------------------|
+
+def run_fluid():
+
+    global Solver
+    verified = False
+
+    if is_fluid():
+
+        verified = Solver.run()
+        if not verified: print('Failed to solve PFEM3D')
+
+    return CW.bcast(verified, root=0)
+
+# The simulation state is shared with MPI
+
+def run_solid():
+
+    global Solver
+    verified = False
+
+    if is_solid():
+
+        verified = Solver.run()
+        if not verified: print('Failed to solve Metafor')
+
+    return CW.bcast(verified, root=1)
 
 # |----------------------------------------------|
 # |   Print the Computation Time of Functions    |

@@ -25,35 +25,22 @@ class BGS(Algorithm):
 # |--------------------------------------|
 
     def coupling_algorithm(self):
-        
-        verified = False
+
         self.iteration = 0
 
         while self.iteration < self.max_iter:
 
+            tb.Solver.way_back()
+
             # Dirichlet transfer and fluid solver run
 
             self.transfer_dirichlet()
-
-            if CW.rank == 0:
-
-                verified = tb.Solver.run()
-                if not verified: tb.Solver.way_back()
-
-            verified = CW.bcast(verified, root=0)
-            if not verified: return False
+            if not tb.run_fluid(): break
 
             # Neumann transfer and solid solver run
 
             self.transfer_neumann()
-
-            if CW.rank == 1: verified = tb.Solver.run()
-            verified = CW.bcast(verified, root=1)
-
-            if not verified:
-                
-                tb.Solver.way_back()
-                return False
+            if not tb.run_solid(): break
 
             # Compute the coupling residual
 
@@ -65,8 +52,8 @@ class BGS(Algorithm):
 
             if hasattr(self, 'update'): self.update(verified)
             if verified: return True
-            tb.Solver.way_back()
 
+        tb.Solver.way_back()
         return False
 
 # |-------------------------------------------------|
