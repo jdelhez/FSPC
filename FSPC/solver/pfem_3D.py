@@ -206,7 +206,7 @@ class PFEM3D(object):
             if(np.min(dist) > epsilon):
 
                 if(node.isFree()):
-                    self.mesh.removeNode(self.FSI[i])
+                    self.mesh.nextRemove.push_back(self.FSI[i])
 
                 else:
                     node.m_isOnFreeSurface = True
