@@ -10,7 +10,7 @@ FSPC.init_solver(path_F, path_S)
 
 # Set the coupling algorithm
 
-algorithm = FSPC.algorithm.ILS(25)
+algorithm = FSPC.algorithm.ILS(10)
 FSPC.set_algorithm(algorithm)
 
 # Set the interface interpolator

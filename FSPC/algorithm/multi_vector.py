@@ -80,7 +80,12 @@ class MVJ(BGS):
             self.jac_mecha.V = list()
             self.jac_mecha.W = list()
 
-            if not self.verified:
+            if(len(self.jac_mecha.J) != tb.ResMech.residual.size):
+
+                self.jac_mecha.set_zero(tb.ResMech.residual.size)
+                delta = self.omega*tb.ResMech.residual
+
+            elif not self.verified:
 
                 self.jac_mecha.set_zero(tb.ResMech.residual.size)
                 delta = self.omega*tb.ResMech.residual
