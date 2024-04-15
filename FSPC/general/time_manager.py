@@ -31,7 +31,10 @@ class TimeStep(object):
         if not verified:
 
             self.dt /= self.division
-            if self.dt < 1e-9: raise Exception('Reached minimal time step')
+            if self.dt < 1e-9:
+                
+                tb.Solver.save()
+                raise Exception('Reached minimal time step')
 
         else:
 
