@@ -51,7 +51,7 @@ def getMetafor(parm):
 
     # Material parameters
 
-    E = 2.7e6
+    E = 2.7e6/4.
     rho = 1200
     nu = 0.45
 
@@ -60,32 +60,32 @@ def getMetafor(parm):
 
     materset = domain.getMaterialSet()
    
-    C1 = 300e3
+    C1 = 584e3/4.
     C2 = G/2.0-C1
 
-    # materset.define(1, w.MooneyRivlinHyperMaterial)
-    # materset(1).put(w.MASS_DENSITY, rho)
-    # materset(1).put(w.RUBBER_PENAL, K)
-    # materset(1).put(w.RUBBER_C1, C1)
-    # materset(1).put(w.RUBBER_C2, C2)
+    materset.define(1, w.MooneyRivlinHyperMaterial)
+    materset(1).put(w.MASS_DENSITY, rho)
+    materset(1).put(w.RUBBER_PENAL, K)
+    materset(1).put(w.RUBBER_C1, C1)
+    materset(1).put(w.RUBBER_C2, C2)
 
-    materset = domain.getMaterialSet()
-    materset.define(1,w.ElastHypoMaterial)
-    materset(1).put(w.ELASTIC_MODULUS,E)
-    materset(1).put(w.MASS_DENSITY,rho)
-    materset(1).put(w.POISSON_RATIO,nu)
+    # materset = domain.getMaterialSet()
+    # materset.define(1,w.ElastHypoMaterial)
+    # materset(1).put(w.ELASTIC_MODULUS,E)
+    # materset(1).put(w.MASS_DENSITY,rho)
+    # materset(1).put(w.POISSON_RATIO,nu)
 
   # Finite element properties
 
     prp1 = w.ElementProperties(w.Volume2DElement)
     prp1.put(w.CAUCHYMECHVOLINTMETH,w.VES_CMVIM_STD)
-    prp1.put(w.STIFFMETHOD,w.STIFF_ANALYTIC)
+    # prp1.put(w.STIFFMETHOD,w.STIFF_ANALYTIC)
+    prp1.put(w.STIFFMETHOD,w.STIFF_NUMERIC)
     prp1.put(w.MATERIAL,1)
     app1.addProperty(prp1)
                  
     # Elements for surface traction
     # Interface qui va reçevoir les contraintes de PFEM3D
-    # Je comprends pas en fait la suite; j'essaie de recopier Flow Contact mais bof !!!! HELP 
 
     prp2 = w.ElementProperties(w.NodStress2DElement)
     load = w.NodInteraction(2)
@@ -150,13 +150,9 @@ def getMetafor(parm):
     #  Contrainte SigmaXX (4) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XX)
     parm['extractor'].add(extr)
-
-    #  Contrainte SigmaXZ (5) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XZ)
-    parm['extractor'].add(extr)
-
-    #  Contrainte SigmaYZ (6) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_YZ)
+    
+    #  Contrainte SigmaXX (5) 
+    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_ORTHO_XY)
     parm['extractor'].add(extr)
     
     domain.build()

@@ -22,6 +22,7 @@ export PYTHONPATH=${PWD}/../PFEM3D/build/bin:${PYTHONPATH}
 # export SCRIPT=${PWD}/examples/2D/elasticFunnel/main.py
 # export SCRIPT=${PWD}/examples/2D/flowContact/main.py
 # export SCRIPT=${PWD}/examples/2D/hydroStatic/main.py
+# export SCRIPT=${PWD}/examples/2D/rubberGate/main.py
 # export SCRIPT=${PWD}/examples/2D/staticAxisym/main.py
 # export SCRIPT=${PWD}/examples/2D/thermoSquare/main.py
 # export SCRIPT=${PWD}/examples/2D/vonKarman/main.py
@@ -32,12 +33,9 @@ export PYTHONPATH=${PWD}/../PFEM3D/build/bin:${PYTHONPATH}
 # export SCRIPT=${PWD}/examples/3D/damBreak/main.py
 # export SCRIPT=${PWD}/examples/3D/hydroStatic/main.py
 
+# export SCRIPT=${PWD}/R1_Aneurysm/main.py
 
-#export SCRIPT=${PWD}/Vein_Newton/main.py
-export SCRIPT=${PWD}/Vein_Casson/main.py
-#export SCRIPT=${PWD}/Aneurysm/Run1/main.py
-#export SCRIPT=${PWD}/TSTRupture/main.py
-
+export SCRIPT=${PWD}/Aneurysm/R2d_Aneurysm/main.py
 
 
 # Clean output folder

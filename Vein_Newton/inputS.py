@@ -47,60 +47,74 @@ def getMetafor(parm):
     app1 = w.FieldApplicator(1)
     app1.push(groups['Solid'])
     iset.add(app1)
-  
+
+    
+    #app2 = w.FieldApplicator(2)
+    #app2.push(groups['Solid2'])
+    #iset.add(app2)
 
     # Material parameters
+    # Matériau appliqué au physical group "Solid"
+    # Pas moyen de définir un matériau unique et de l'appliquer aux deux surfaces? 
 
-    E = 2.7e6
-    rho = 1200
-    nu = 0.45
-
-    G = E/(2*(1+nu))
-    K = E/(3*(1-2*nu)) 
-
-    materset = domain.getMaterialSet()
-   
-    C1 = 300e3
-    C2 = G/2.0-C1
-
-    # materset.define(1, w.MooneyRivlinHyperMaterial)
-    # materset(1).put(w.MASS_DENSITY, rho)
-    # materset(1).put(w.RUBBER_PENAL, K)
-    # materset(1).put(w.RUBBER_C1, C1)
-    # materset(1).put(w.RUBBER_C2, C2)
+     # Solid material parameters
 
     materset = domain.getMaterialSet()
     materset.define(1,w.ElastHypoMaterial)
-    materset(1).put(w.ELASTIC_MODULUS,E)
-    materset(1).put(w.MASS_DENSITY,rho)
-    materset(1).put(w.POISSON_RATIO,nu)
+    materset(1).put(w.ELASTIC_MODULUS,1.2e6) #### 675e3
+    materset(1).put(w.MASS_DENSITY,1200)
+    materset(1).put(w.POISSON_RATIO,0.45)
 
-  # Finite element properties
+    #materset.define(2,w.ElastHypoMaterial)
+    #materset(2).put(w.ELASTIC_MODULUS,1e6) #### 675e3
+    #materset(2).put(w.MASS_DENSITY,1100)
+    #materset(2).put(w.POISSON_RATIO,0.49)
+
+    # materset.define (2, EvpIsoHHypoMaterial)
+    # materset(2).put(MASS_DENSITY, 1100)
+    # materset(2).put(ELASTIC_MODULUS, 10e3)
+    # materset(2).put(POISSON_RATIO, 0.3)
+    # materset(2).put(YIELD_NUM, 1)
+
+    # Finite element properties
 
     prp1 = w.ElementProperties(w.Volume2DElement)
     prp1.put(w.CAUCHYMECHVOLINTMETH,w.VES_CMVIM_STD)
     prp1.put(w.STIFFMETHOD,w.STIFF_ANALYTIC)
     prp1.put(w.MATERIAL,1)
     app1.addProperty(prp1)
-                 
+
+    
+    #prp2 = w.ElementProperties(w.Volume2DElement)
+    #prp2.put(w.CAUCHYMECHVOLINTMETH,w.VES_CMVIM_STD)
+    #prp2.put(w.STIFFMETHOD,w.STIFF_ANALYTIC)
+    #prp2.put(w.MATERIAL,2)
+    #app2.addProperty(prp2)
+
+        
+   
     # Elements for surface traction
     # Interface qui va reçevoir les contraintes de PFEM3D
     # Je comprends pas en fait la suite; j'essaie de recopier Flow Contact mais bof !!!! HELP 
 
-    prp2 = w.ElementProperties(w.NodStress2DElement)
+    prp3 = w.ElementProperties(w.NodStress2DElement)
     load = w.NodInteraction(2)
     load.push(groups['FSInterface'])
-    load.addProperty(prp2)
+    load.addProperty(prp3)
     iset.add(load)
 
-    
+    #Maybe je dois separer en deux groupes? En haut et en bas? I don't knowww ; genre faire comme ça:  ??? 
+
+
     # Boundary conditions 
     # On bloque la base du solide --> Je dois bloquer quoi moi du coup? Les côtés "side" non? 
     
     loadingset = domain.getLoadingSet()
     loadingset.define(groups['Sides'],w.Field1D(w.TX,w.RE)) # Pas de déplacement selon X
     loadingset.define(groups['Sides'],w.Field1D(w.TY,w.RE)) # Pas de déplacement selon Y
-    
+    # loadingset.define(groups['Axis'],w.Field1D(w.TX,w.RE)) --> Le axis ne fait pas partie du solide... comment imposer la symetrie pour le solide?? Rien à imposer.
+
+
 
     # Mechanical time integration
 
@@ -149,14 +163,6 @@ def getMetafor(parm):
 
     #  Contrainte SigmaXX (4) 
     extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XX)
-    parm['extractor'].add(extr)
-
-    #  Contrainte SigmaXZ (5) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XZ)
-    parm['extractor'].add(extr)
-
-    #  Contrainte SigmaYZ (6) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_YZ)
     parm['extractor'].add(extr)
     
     domain.build()

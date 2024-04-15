@@ -14,9 +14,6 @@ def getMetafor(parm):
     if metafor: return metafor
     metafor = w.Metafor()
 
-    w.StrVectorBase.useTBB() # Active la paralélisation de certaisn conteneurs
-    w.StrMatrixBase.useTBB()
-    w.ContactInteraction.useTBB()
 
     # Dimension and DSS solver
 
@@ -45,52 +42,91 @@ def getMetafor(parm):
 
     iset = domain.getInteractionSet()
     app1 = w.FieldApplicator(1)
-    app1.push(groups['Solid'])
+    app1.push(groups['Intima'])
     iset.add(app1)
+    app2 = w.FieldApplicator(2)
+    app2.push(groups['Media'])
+    iset.add(app2)
+    app3 = w.FieldApplicator(3)
+    app3.push(groups['Adventitia'])
+    iset.add(app3)
   
 
     # Material parameters
 
-    E = 2.7e6
+
+    materset = domain.getMaterialSet()
+
+    E = 1.174e6
     rho = 1200
     nu = 0.45
-
     G = E/(2*(1+nu))
     K = E/(3*(1-2*nu)) 
-
-    materset = domain.getMaterialSet()
-   
-    C1 = 300e3
+    C1 = 584e3*1.174/2.7
     C2 = G/2.0-C1
 
-    # materset.define(1, w.MooneyRivlinHyperMaterial)
-    # materset(1).put(w.MASS_DENSITY, rho)
-    # materset(1).put(w.RUBBER_PENAL, K)
-    # materset(1).put(w.RUBBER_C1, C1)
-    # materset(1).put(w.RUBBER_C2, C2)
 
-    materset = domain.getMaterialSet()
-    materset.define(1,w.ElastHypoMaterial)
-    materset(1).put(w.ELASTIC_MODULUS,E)
-    materset(1).put(w.MASS_DENSITY,rho)
-    materset(1).put(w.POISSON_RATIO,nu)
+    materset.define(1, w.MooneyRivlinHyperMaterial)
+    materset(1).put(w.MASS_DENSITY, rho)
+    materset(1).put(w.RUBBER_PENAL, K)
+    materset(1).put(w.RUBBER_C1, C1)
+    materset(1).put(w.RUBBER_C2, C2)
 
+    E = 3.522e6
+    rho = 1200
+    nu = 0.45
+    G = E/(2*(1+nu))
+    K = E/(3*(1-2*nu)) 
+    C1 = 584e3*3.522/2.7
+    C2 = G/2.0-C1
+
+    materset.define(2, w.MooneyRivlinHyperMaterial)
+    materset(2).put(w.MASS_DENSITY, rho)
+    materset(2).put(w.RUBBER_PENAL, K)
+    materset(2).put(w.RUBBER_C1, C1)
+    materset(2).put(w.RUBBER_C2, C2)
+
+    E = 2.348e6
+    rho = 1200
+    nu = 0.45
+    G = E/(2*(1+nu))
+    K = E/(3*(1-2*nu)) 
+    C1 = 584e3*2.348/2.7
+    C2 = G/2.0-C1
+
+    materset.define(3, w.MooneyRivlinHyperMaterial)
+    materset(3).put(w.MASS_DENSITY, rho)
+    materset(3).put(w.RUBBER_PENAL, K)
+    materset(3).put(w.RUBBER_C1, C1)
+    materset(3).put(w.RUBBER_C2, C2)
   # Finite element properties
 
     prp1 = w.ElementProperties(w.Volume2DElement)
     prp1.put(w.CAUCHYMECHVOLINTMETH,w.VES_CMVIM_STD)
-    prp1.put(w.STIFFMETHOD,w.STIFF_ANALYTIC)
+    prp1.put(w.STIFFMETHOD,w.STIFF_NUMERIC)
     prp1.put(w.MATERIAL,1)
     app1.addProperty(prp1)
+
+    prp2 = w.ElementProperties(w.Volume2DElement)
+    prp2.put(w.CAUCHYMECHVOLINTMETH,w.VES_CMVIM_STD)
+    prp2.put(w.STIFFMETHOD,w.STIFF_NUMERIC)
+    prp2.put(w.MATERIAL,2)
+    app2.addProperty(prp2)
+
+    prp3 = w.ElementProperties(w.Volume2DElement)
+    prp3.put(w.CAUCHYMECHVOLINTMETH,w.VES_CMVIM_STD)
+    prp3.put(w.STIFFMETHOD,w.STIFF_NUMERIC)
+    prp3.put(w.MATERIAL,3)
+    app3.addProperty(prp3)
                  
     # Elements for surface traction
     # Interface qui va reçevoir les contraintes de PFEM3D
     # Je comprends pas en fait la suite; j'essaie de recopier Flow Contact mais bof !!!! HELP 
 
-    prp2 = w.ElementProperties(w.NodStress2DElement)
-    load = w.NodInteraction(2)
+    prp4 = w.ElementProperties(w.NodStress2DElement)
+    load = w.NodInteraction(4)
     load.push(groups['FSInterface'])
-    load.addProperty(prp2)
+    load.addProperty(prp4)
     iset.add(load)
 
     
@@ -132,31 +168,43 @@ def getMetafor(parm):
     #parm['polytope'] = load.getElementSet() ?? 
 
     #  Contrainte de Von Mises (0) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_EVMS)
+    extr = w.IFNodalValueExtractor(groups['Intima'],w.IF_EVMS) 
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Media'],w.IF_EVMS) 
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Adventitia'],w.IF_EVMS) 
     parm['extractor'].add(extr)
 
     #  Contrainte SigmaYY (1) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_YY)
+    extr = w.IFNodalValueExtractor(groups['Intima'],w.IF_SIG_YY)
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Media'],w.IF_SIG_YY)
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Adventitia'],w.IF_SIG_YY)
     parm['extractor'].add(extr)
 
-    #  Contrainte SigmaZZ (2) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_ZZ)
+    #  Contrainte SigmaZZ (1) 
+    extr = w.IFNodalValueExtractor(groups['Intima'],w.IF_SIG_ZZ)
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Media'],w.IF_SIG_ZZ)
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Adventitia'],w.IF_SIG_ZZ)
     parm['extractor'].add(extr)
 
     #  Contrainte SigmaXY (3) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XY)
+    extr = w.IFNodalValueExtractor(groups['Intima'],w.IF_SIG_XY)
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Media'],w.IF_SIG_XY)
+    parm['extractor'].add(extr)
+    extr = w.IFNodalValueExtractor(groups['Adventitia'],w.IF_SIG_XY)
     parm['extractor'].add(extr)
 
     #  Contrainte SigmaXX (4) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XX)
+    extr = w.IFNodalValueExtractor(groups['Intima'],w.IF_SIG_XX)
     parm['extractor'].add(extr)
-
-    #  Contrainte SigmaXZ (5) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_XZ)
+    extr = w.IFNodalValueExtractor(groups['Media'],w.IF_SIG_XX)
     parm['extractor'].add(extr)
-
-    #  Contrainte SigmaYZ (6) 
-    extr = w.IFNodalValueExtractor(groups['Solid'],w.IF_SIG_YZ)
+    extr = w.IFNodalValueExtractor(groups['Adventitia'],w.IF_SIG_XX)
     parm['extractor'].add(extr)
     
     domain.build()

@@ -10,8 +10,8 @@ export PYTHONPATH=${PWD}/../PFEM3D/build/bin:${PYTHONPATH}
 
 # Path to the Python script
 
-export SCRIPT1=${PWD}/R1c_Aneurysm/main.py
-export SCRIPT2=${PWD}/R4c_Aneurysm/main.py
+export SCRIPT1=${PWD}/Vein_Newton/main.py
+export SCRIPT2=${PWD}/Vein_Casson/main.py
 
 
 # Clean output folder
@@ -32,7 +32,7 @@ export OPTION="-map-by node:PE=${CPU_PER_PROC}"
 mpiexec ${OPTION} -n 2 python3 ${SCRIPT1} -k ${THR_PER_PROC} 2>&1 | tee workspace.txt
 
 cd ..
-mv workspace /R1c_workspace
+mv workspace /ws_Newton
 
 mkdir workspace
 cd workspace
@@ -41,5 +41,5 @@ mpiexec ${OPTION} -n 2 python3 ${SCRIPT2} -k ${THR_PER_PROC} 2>&1 | tee workspac
 
 
 cd ..
-mv workspace /R4c_workspace
+mv workspace /ws_Casson
 
