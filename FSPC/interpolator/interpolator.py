@@ -50,6 +50,8 @@ class Interpolator(object):
     @tb.only_mechanical
     def apply_displacement(self):
 
+        # Nan in the solid displacement if metafor failed !!!!
+
         if tb.is_fluid():
 
             recv = CW.recv(source=1, tag=4)
