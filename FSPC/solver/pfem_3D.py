@@ -43,9 +43,9 @@ class PFEM3D(object):
 
         # Compute the initial mechanical load
 
-        vector = w.VectorVectorDouble()
-        self.solver.computeStress('FSInterface', self.FSI, vector)
-        self.prev_load = np.copy(vector)
+        # vector = w.VectorVectorDouble()
+        # self.solver.computeStress('FSInterface', self.FSI, vector)
+        # self.prev_load = np.copy(vector)
 
 # |-----------------------------------------|
 # |   Run PFEM in the Current Time Frame    |
@@ -89,7 +89,8 @@ class PFEM3D(object):
 
         vector = w.VectorVectorDouble()
         self.solver.computeStress('FSInterface', self.FSI, vector)
-        return (np.array(vector)+self.prev_load)/2
+        #return (np.array(vector)+self.prev_load)/2
+        return np.copy(vector)
 
     # Return Thermal boundary conditions
 
@@ -170,9 +171,9 @@ class PFEM3D(object):
 
         # Compute the new initial mechanical load
 
-        vector = w.VectorVectorDouble()
-        self.solver.computeStress('FSInterface', self.FSI, vector)
-        self.prev_load = np.copy(vector)
+        # vector = w.VectorVectorDouble()
+        # self.solver.computeStress('FSInterface', self.FSI, vector)
+        # self.prev_load = np.copy(vector)
 
     # Backup the solver state if needed
 
